@@ -10,44 +10,46 @@ create table artist (
 );
 
 create table certification (
-  id          number,
-  name        varchar2,
-  description varchar2,
+  id          number(6),
+  name        varchar2(25),
+  description varchar2(50),
   constraint cert$pk primary key (id),
   constraint cert$name$nn check (name is not null),
   constraint cert$name$un unique (name)
 );
 
 create table status (
-  id          number,
-  name        varchar2,
+  id          number(6),
+  name        varchar2(25),
   constraint status$pk primary key (id),
   constraint status$name$nn check (name is not null),
   constraint status$name$un unique (name)
 );
 
 create table genre (
-  id   number,
-  name varchar2,
+  id   number(6),
+  name varchar2(25),
   constraint genre$pk primary key (id),
   constraint genre$name$nn check (name is not null),
   constraint genre$name$un unique (name)
 );
 
 create table movie (
-  id            number,
-  title         varchar2,
-  status        number,
-  tagline       varchar2,
+  id            number(6),
+  title         varchar2(30),
+  status        number(1),
+  tagline       varchar2(150),
   release_date  date,
-  vote_average  number,
-  vote_count    number,
-  certification number,
-  runtime       number,
-  budget        number,
+  vote_average  number(2),
+  vote_count    number(6),
+  certification number(4),
+  runtime       number(3),
+  budget        number(9),
   poster        blob,
   constraint movie$pk primary key (id),
-  constraint movie$title$nn check (title is not null)
+  constraint movie$title$nn check (title is not null),
+  constraint movie$rdate$nn check (release_date is not null
+  --constraint movie$certification check (certification in ('G', 'PG', 'PG-13', 'R', 'NC-17'))
 );
 
 create table movie_director (
@@ -57,14 +59,14 @@ create table movie_director (
 );
 
 create table movie_genre (
-  genre number,
-  movie number,
+  genre number(2),
+  movie number(9),
   constraint m_g$pk primary key (genre, movie)
   ) ;
 
 create table movie_actor
   (
-  movie  number,
-  actor number,
+  movie  number(9),
+  actor number(6),
   constraint m_a$pk primary key (movie, actor)
 );
