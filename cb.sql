@@ -40,15 +40,15 @@ create table movie (
   status        number(1),
   tagline       varchar2(150),
   release_date  date,
-  vote_average  number(2),
-  vote_count    number(6),
+  vote_average  int,
+  vote_count    int,
   certification number(4),
-  runtime       number(3),
-  budget        number(9),
+  runtime       int,
+  budget        int,
   poster        blob,
   constraint movie$pk primary key (id),
   constraint movie$title$nn check (title is not null),
-  constraint movie$rdate$nn check (release_date is not null
+  constraint movie$rdate$nn check (release_date is not null)
   --constraint movie$certification check (certification in ('G', 'PG', 'PG-13', 'R', 'NC-17'))
 );
 
