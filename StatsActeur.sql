@@ -76,3 +76,8 @@ BEGIN
                 nb_valzero, quant95, dis);
   COMMIT;
 END;
+--           SELECT substr(chaine, --Chaine
+--                         start_pos, --Index du début (Récursif)
+--                         (CASE WHEN end_pos = 0 -- Si c'est le dernier element
+--                           THEN length(chaine) + 1 -- On mets la taille de la chaine totale - index de départ
+--                          ELSE end_pos END) - start_pos) s -- Sinon on mets index de fin de chaine - index de départ
