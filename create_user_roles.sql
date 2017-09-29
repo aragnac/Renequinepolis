@@ -1,3 +1,4 @@
+DROP ROLE sgbd3_role;
 CREATE ROLE sgbd3_role NOT IDENTIFIED;
 GRANT ALTER SESSION TO sgbd3_role;
 GRANT CREATE DATABASE LINK TO sgbd3_role;
@@ -13,11 +14,17 @@ GRANT CREATE JOB TO sgbd3_role;
 GRANT CREATE MATERIALIZED VIEW TO sgbd3_role;
 GRANT EXECUTE ON sys.dbms_lock TO sgbd3_role;
 GRANT EXECUTE ON sys.owa_opt_lock TO sgbd3_role;
+GRANT EXECUTE ON sys.dbms_output TO sgbd3_role;
 
+DROP USER cb CASCADE;
 CREATE USER cb IDENTIFIED BY oracle ACCOUNT UNLOCK;
 ALTER USER cb QUOTA UNLIMITED ON users;
 GRANT sgbd3_role TO cb;
 
+DROP USER cc CASCADE;
 CREATE USER cc IDENTIFIED BY oracle ACCOUNT UNLOCK;
 ALTER USER cc QUOTA UNLIMITED ON users;
 GRANT sgbd3_role TO cc;
+
+CREATE DIRECTORY mydir as '/home/oracle/sgbd';
+grant read,write on DIRECTORY mydir to cb;
