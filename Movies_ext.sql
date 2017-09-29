@@ -1,3 +1,4 @@
+drop table movies_ext;
 CREATE TABLE movies_ext (
   id             integer,
   title          varchar2(2000 char),
@@ -22,37 +23,24 @@ ACCESS PARAMETERS (
   RECORDS DELIMITED BY "\n"
     CHARACTERSET "AL32UTF8"
     STRING SIZES ARE IN CHARACTERS
-  FIELDS TERMINATED BY X "E280A3"
+  FIELDS TERMINATED BY X"E280A3"
 MISSING FIELD VALUES ARE NULL
 (
-ID UNSIGNED INTEGER EXTERNAL,
-  title CHAR (2000
-),
-  original_title CHAR (2000
-),
-  release_date CHAR (10
-) DATE_FORMAT DATE MASK "yyyy-mm-dd",
-  status CHAR (30
-),
-  vote_average FLOAT EXTERNAL,
-  vote_count UNSIGNED INTEGER EXTERNAL,
-  runtime UNSIGNED INTEGER EXTERNAL,
-  certification CHAR (30
-),
-  poster_path CHAR (100
-),
-  budget UNSIGNED INTEGER EXTERNAL,
-  tagline CHAR (10000
-),
-  genres CHAR (1000
-),
-  directors CHAR (10000
-),
-  actors CHAR (10000
-)
-)
-)
-LOCATION ('movies.txt'
-)
+  ID UNSIGNED INTEGER EXTERNAL,
+    title CHAR (2000),
+    original_title CHAR (2000),
+    release_date CHAR (10) DATE_FORMAT DATE MASK "yyyy-mm-dd",
+    status CHAR (30),
+    vote_average FLOAT EXTERNAL,
+    vote_count UNSIGNED INTEGER EXTERNAL,
+    runtime UNSIGNED INTEGER EXTERNAL,
+    certification CHAR (30),
+    poster_path CHAR (100),
+    budget UNSIGNED INTEGER EXTERNAL,
+    tagline CHAR (10000),
+    genres CHAR (1000),
+    directors CHAR (10000),
+    actors CHAR (10000)))
+  LOCATION ('movies.txt')
 )
 REJECT LIMIT UNLIMITED;
