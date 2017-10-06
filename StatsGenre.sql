@@ -2,7 +2,7 @@ CREATE TABLE tabl (
   idn    varchar2(10000),
   entree varchar2(10000)
 );
-PROMPT Acteurs
+PROMPT Genre
 DECLARE
   maximum       number;
   mini          number;
@@ -20,9 +20,9 @@ BEGIN
     WITH temp (id, chaine, start_pos, end_pos) AS (
       SELECT
         id,
-        directors,
+        genres,
         1,
-        instr(directors, unistr('\2016'), 1)
+        instr(genres, unistr('\2016'), 1)
       FROM movies_ext
       UNION ALL
       SELECT
@@ -39,7 +39,7 @@ BEGIN
                                          ELSE end_pos END) - start_pos), 1,
               instr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
                 THEN length(chaine) + 1
-                                               ELSE end_pos END) - start_pos), unistr('\2024'), 1) - 1)) AS id,
+                                               ELSE end_pos END) - start_pos),unistr('\2024'), 1) - 1))                                               AS id,
       substr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
         THEN length(chaine) + 1
                                         ELSE end_pos END) - start_pos),
@@ -51,7 +51,7 @@ BEGIN
              ELSE end_pos END
              - instr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
                THEN length(chaine) + 1
-                                                ELSE end_pos END) - start_pos), unistr('\2024'), 1) - 1) AS actor
+                                                ELSE end_pos END) - start_pos), unistr('\2024'), 1) - 1) AS gender
     FROM temp;
 
   SELECT
@@ -77,10 +77,9 @@ BEGIN
   INTO moyenne
   FROM tabl;
 
-  INSERT INTO stats VALUES
-    ('ACTOR.NAME', 'VARCHAR2', mini, maximum, moyenne, mediane, ecart_type, nb_val,
-                   nb_valnull, abs(nb_val - nb_valnull), nb_valzero, quant95, dis);
-
+    INSERT INTO stats VALUES
+      ('GENRE.NAME', 'VARCHAR2', mini, maximum, moyenne, mediane, ecart_type, nb_val,
+                     nb_valnull, abs(nb_val - nb_valnull), nb_valzero, quant95, dis);
   SELECT
     min(length(idn))                  AS minimum,
     max(length(idn))                  AS maximum,
@@ -104,9 +103,9 @@ BEGIN
   INTO moyenne
   FROM tabl;
 
-  INSERT INTO stats VALUES
-    ('ACTOR.ID', 'VARCHAR2', mini, maximum, moyenne, mediane, ecart_type, nb_val,
-                 nb_valnull, abs(nb_val - nb_valnull), nb_valzero, quant95, dis);
+    INSERT INTO stats VALUES
+      ('GENRE.ID', 'VARCHAR2', mini, maximum, moyenne, mediane, ecart_type, nb_val,
+                   nb_valnull, abs(nb_val - nb_valnull), nb_valzero, quant95, dis);
   COMMIT;
 END;
 /
