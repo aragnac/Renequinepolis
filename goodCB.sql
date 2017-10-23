@@ -12,7 +12,7 @@ DROP TABLE logerror CASCADE CONSTRAINTS;
 DROP TABLE loginfos CASCADE CONSTRAINTS;
 
 CREATE TABLE artist (
-  id   NUMBER(6),
+  id   NUMBER(7),
   name VARCHAR2(25),
   CONSTRAINT artist$pk PRIMARY KEY (id),
   CONSTRAINT artist$name$nn CHECK (name IS NOT NULL)
@@ -29,7 +29,7 @@ CREATE TABLE certification (
 
 CREATE TABLE status (
   id   NUMBER(6),
-  name VARCHAR2(25),
+  name VARCHAR2(15),
   CONSTRAINT status$pk PRIMARY KEY (id),
   CONSTRAINT status$name$nn CHECK (name IS NOT NULL),
   CONSTRAINT status$name$un UNIQUE (name)
@@ -37,7 +37,7 @@ CREATE TABLE status (
 
 CREATE TABLE genre (
   id   NUMBER(6),
-  name VARCHAR2(25),
+  name VARCHAR2(16),
   CONSTRAINT genre$pk PRIMARY KEY (id),
   CONSTRAINT genre$name$nn CHECK (name IS NOT NULL),
   CONSTRAINT genre$name$un UNIQUE (name)
@@ -45,14 +45,14 @@ CREATE TABLE genre (
 
 CREATE TABLE movie (
   id             NUMBER(6),
-  title          VARCHAR2(30),
-  original_title VARCHAR2(30),
-  status         NUMBER(1),
+  title          VARCHAR2(43),
+  original_title VARCHAR2(393),
+  status         NUMBER(2),
   release_date   DATE,
   vote_average   NUMBER(2),
-  vote_count     NUMBER(6),
-  certification  NUMBER(4),
-  runtime        NUMBER(3),
+  vote_count     NUMBER(4),
+  certification  VARCHAR2(12),
+  runtime        NUMBER(5),
   poster         BLOB,
   CONSTRAINT movie$pk PRIMARY KEY (id),
   CONSTRAINT movie$title$nn CHECK (title IS NOT NULL),
@@ -61,20 +61,20 @@ CREATE TABLE movie (
 );
 
 CREATE TABLE movie_director (
-  movie    NUMBER,
-  director NUMBER,
+  director NUMBER(19),
+  movie    NUMBER(6) CONSTRAINT m_d$fk$movie REFERENCES movie(id),
   CONSTRAINT m_d$pk PRIMARY KEY (movie, director)
 );
 
 CREATE TABLE movie_genre (
   genre NUMBER(2),
-  movie NUMBER(9),
+  movie NUMBER(6) CONSTRAINT m_g$fk$movie REFERENCES movie(id),
   CONSTRAINT m_g$pk PRIMARY KEY (genre, movie)
 );
 
 CREATE TABLE movie_actor (
-  movie NUMBER(9),
   actor NUMBER(6),
+  movie NUMBER(6) CONSTRAINT m_a$fk$movie REFERENCES movie(id),
   CONSTRAINT m_a$pk PRIMARY KEY (movie, actor)
 );
 
