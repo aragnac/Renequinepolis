@@ -10,17 +10,17 @@ DROP TABLE utilisateur CASCADE CONSTRAINTS;
 DROP TABLE commentaire CASCADE CONSTRAINTS;
 DROP TABLE logerror CASCADE CONSTRAINTS;
 DROP TABLE loginfos CASCADE CONSTRAINTS;
-
+-- On y stoque les actors et les directors
 CREATE TABLE artist (
   id   NUMBER(7),
-  name VARCHAR2(25),
+  name VARCHAR2(19),
   CONSTRAINT artist$pk PRIMARY KEY (id),
   CONSTRAINT artist$name$nn CHECK (name IS NOT NULL)
 );
 
 CREATE TABLE certification (
   id          NUMBER(6),
-  name        VARCHAR2(25),
+  name        VARCHAR2(12),
   description VARCHAR2(50),
   CONSTRAINT cert$pk PRIMARY KEY (id),
   CONSTRAINT cert$name$nn CHECK (name IS NOT NULL),
@@ -36,7 +36,7 @@ CREATE TABLE status (
 );
 
 CREATE TABLE genre (
-  id   NUMBER(6),
+  id   NUMBER(5),
   name VARCHAR2(16),
   CONSTRAINT genre$pk PRIMARY KEY (id),
   CONSTRAINT genre$name$nn CHECK (name IS NOT NULL),
@@ -46,7 +46,7 @@ CREATE TABLE genre (
 CREATE TABLE movie (
   id             NUMBER(6),
   title          VARCHAR2(43),
-  original_title VARCHAR2(393),
+  original_title VARCHAR2(43), -- Est-ce qu'on retient la taille totale ou bien la taille tronquée
   status         NUMBER(2),
   release_date   DATE,
   vote_average   NUMBER(2),
@@ -61,13 +61,13 @@ CREATE TABLE movie (
 );
 
 CREATE TABLE movie_director (
-  director NUMBER(19),
+  director NUMBER(7),
   movie    NUMBER(6) CONSTRAINT m_d$fk$movie REFERENCES movie(id),
   CONSTRAINT m_d$pk PRIMARY KEY (movie, director)
 );
 
 CREATE TABLE movie_genre (
-  genre NUMBER(2),
+  genre NUMBER(5),
   movie NUMBER(6) CONSTRAINT m_g$fk$movie REFERENCES movie(id),
   CONSTRAINT m_g$pk PRIMARY KEY (genre, movie)
 );
@@ -87,7 +87,7 @@ CREATE TABLE utilisateur (
 CREATE TABLE commentaire (
   idutilisateur INTEGER CONSTRAINT commentaire$user$fk REFERENCES utilisateur (id),
   idfilm        NUMBER(6) CONSTRAINT commentaire$movie$fk REFERENCES movie (id),
-  commentaire   VARCHAR2(1000),
+  commentaire   VARCHAR2(10000),
   CONSTRAINT commentaire$pk PRIMARY KEY (idutilisateur, idfilm)
 );
 
