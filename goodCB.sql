@@ -101,13 +101,15 @@ CREATE TABLE commentaire (
 );
 
 CREATE TABLE logerror (
-  instant timestamp DEFAULT current_timestamp(5) CONSTRAINT logerror$pk PRIMARY KEY,
-  titre   varchar2(100),
-  message varchar2(10000)
+  instant TIMESTAMP DEFAULT current_timestamp(5) CONSTRAINT logerror$pk PRIMARY KEY,
+  datem   DATE,
+  titre   VARCHAR2(100),
+  message VARCHAR2(10000)
 );
 
 CREATE TABLE loginfos (
-  instant timestamp DEFAULT current_timestamp(5) CONSTRAINT loginfos$pk PRIMARY KEY,
-  titre   varchar2(100),
-  message varchar2(10000)
+  instant TIMESTAMP DEFAULT current_timestamp(5) CONSTRAINT loginfos$pk PRIMARY KEY,
+  datem   DATE,
+  titre   VARCHAR2(100),
+  message VARCHAR2(10000)
 );
