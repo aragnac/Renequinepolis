@@ -172,15 +172,7 @@ create or replace package body pkgAlim as
 
 /**************************************************************************************************************/
 
-    /*procedure insert_composite(line_in in varchar2, type_in in integer, movieId_in in integer)
-    is
-        id integer;
-        name varchar2(200); -- cf. csv
-        i number := 1;
-        doInsert boolean := true;
-        duplicate_in_str exception;
-        pragma exception_init(duplicate_in_str, -2291); -- doublons, ex: movie 447725 deux fois le même acteur sur la même ligne
-    */
+
     procedure insertActor(line in VARCHAR2, movieId in integer) is
         id integer;
         name varchar2(200);

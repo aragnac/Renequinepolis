@@ -93,12 +93,14 @@ CREATE TABLE commentaire (
 
 CREATE TABLE logerror (
   instant TIMESTAMP CONSTRAINT logerror$pk PRIMARY KEY,
+  datem   DATE,
   titre   VARCHAR2(100),
   message VARCHAR2(10000)
 );
 
 CREATE TABLE loginfos (
   instant TIMESTAMP CONSTRAINT loginfos$pk PRIMARY KEY,
+  datem   DATE,
   titre   VARCHAR2(100),
   message VARCHAR2(10000)
 );
