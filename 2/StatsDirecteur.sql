@@ -16,7 +16,8 @@ DECLARE
   quant95       integer;
   dis           integer;
 BEGIN
-  INSERT INTO tabl (idn, entree)
+  --Crée dans une table avec with
+
     WITH temp (id, chaine, start_pos, end_pos) AS (
       SELECT
         id,
@@ -32,7 +33,8 @@ BEGIN
         instr(chaine, unistr('\2016'), end_pos + 1)
       FROM temp
       WHERE end_pos != 0
-    )
+    ),
+        tabl (idn,entree) as(
     SELECT
       (substr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
         THEN length(chaine) + 1
@@ -52,7 +54,7 @@ BEGIN
              - instr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
                THEN length(chaine) + 1
                                                 ELSE end_pos END) - start_pos), unistr('\2024'), 1) - 1) AS director
-    FROM temp;
+    FROM temp),
 
   SELECT
     min(length(entree))                  AS minimum,
@@ -71,11 +73,8 @@ BEGIN
   INTO mini, maximum, mediane, ecart_type, nb_val,
     nb_valnull, nb_valzero, quant95, dis
   FROM
-    tabl;
+    temp;
 
-  SELECT avg(length(entree)) AS moyenne
-  INTO moyenne
-  FROM tabl;
 
   INSERT INTO stats VALUES
     ('DIRECTOR.NAME', 'VARCHAR2', mini, maximum, moyenne, mediane, ecart_type, nb_val,
@@ -108,6 +107,7 @@ BEGIN
     ('DIRECTOR.ID', 'VARCHAR2', mini, maximum, moyenne, mediane, ecart_type, nb_val,
                  nb_valnull, abs(nb_val - nb_valnull), nb_valzero, quant95, dis);
   COMMIT;
+  --Ajouter exception dans une table log + rollback
 END;
 /
 DROP TABLE tabl;
