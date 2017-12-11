@@ -4,17 +4,27 @@ package Vues;/*
  * and open the template in the editor.
  */
 
+import java.sql.Connection;
+
 /**
  *
  * @author Nicolas
  */
 public class DetailsFilm extends javax.swing.JFrame {
 
+    Connection db;
+    String idFilm;
     /**
      * Creates new form DetailsFilm
      */
     public DetailsFilm() {
         initComponents();
+    }
+    
+    public DetailsFilm(Connection base, String id) {
+        initComponents();
+        db = base;
+        idFilm = id;
     }
 
     /**

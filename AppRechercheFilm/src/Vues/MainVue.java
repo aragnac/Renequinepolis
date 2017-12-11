@@ -5,6 +5,7 @@ import oracle.sql.ARRAY;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.Component;
+import java.awt.event.MouseEvent;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -312,7 +313,12 @@ public class MainVue extends javax.swing.JFrame {
     }
 
     private void ResultatJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResultatJTableMouseClicked
-
+        if(evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2)
+        {
+            int row = ResultatJTable.getSelectedRow();
+            String id = (String)ResultatJTable.getValueAt(row, 0);
+            new DetailsFilm(db.getConnection(), id).setVisible(true);
+        }
     }//GEN-LAST:event_ResultatJTableMouseClicked
 
     /**

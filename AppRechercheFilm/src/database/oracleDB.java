@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
 import oracle.sql.ArrayDescriptor;
@@ -77,15 +78,16 @@ public class oracleDB {
         }
     }
 
-    public ResultSet getMovie(String id)
-    {
+    public Connection getConnection(){ return Con;}
+
+    public ResultSet getMovie(String id) {
         ResultSet rs = null;
 
         try {
             callabStat = Con.prepareCall("? = call RechFilm.GetMovie(?)");
             callabStat.registerOutParameter(1, OracleTypes.CURSOR);
             //ID
-            if(Pattern.matches("\\d+", id))
+            if (Pattern.matches("\\d+", id))
                 callabStat.setInt(1, Integer.parseInt(id));
             else callabStat.setNull(1, Types.INTEGER);
 
@@ -101,12 +103,10 @@ public class oracleDB {
     /*
     * Retourne un tableau contenant tous les films résultant de la recherche.
     */
-    public ResultSet getMovies(String titre, ArrayList acteurs, ArrayList producteurs, String date)
-    {
+    public ResultSet getMovies(String titre, ArrayList acteurs, ArrayList producteurs, String date) {
         ResultSet rs = null;
 
-        try
-        {
+        try {
             ArrayDescriptor array_artistsDesc = ArrayDescriptor.createDescriptor("CB.ARRAY_INFOS", Con);
 
             callabStat = Con.prepareCall("? = call  RechFilm.GetMovies(?, ?, ?, ?, ?)");
@@ -127,10 +127,50 @@ public class oracleDB {
             callabStat.setString(2, date);
 
             rs = (ResultSet) callabStat.getObject(1);
+        } catch (SQLException ex) {
+
+        }
+        return rs;
+    }
+
+    public ResultSet getActors(String id_film)
+    {
+        ResultSet rs = null;
+        try
+        {
+            callabStat = Con.prepareCall("? = call RechFilm.GetActorsFromMovie(?)");
+            callabStat.registerOutParameter(1, OracleTypes.CURSOR);
+
+            if (Pattern.matches("\\d+", id_film))
+                callabStat.setInt(1, Integer.parseInt(id_film));
+
+            else callabStat.setNull(1, Types.INTEGER);
+
+            rs = (ResultSet) callabStat.getObject(1);
         }
         catch (SQLException ex)
         {
+        }
+        return rs;
+    }
 
+    public ResultSet getRealisateurs(String id_film)
+    {
+        ResultSet rs = null;
+        try
+        {
+            callabStat = Con.prepareCall("? = call RechFilm.GetDirectorsFromMovie(?)");
+            callabStat.registerOutParameter(1, OracleTypes.CURSOR);
+
+            if (Pattern.matches("\\d+", id_film))
+                callabStat.setInt(1, Integer.parseInt(id_film));
+
+            else callabStat.setNull(1, Types.INTEGER);
+
+            rs = (ResultSet) callabStat.getObject(1);
+        }
+        catch (SQLException ex)
+        {
         }
         return rs;
     }
