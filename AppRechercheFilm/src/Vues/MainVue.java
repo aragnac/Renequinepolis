@@ -1,6 +1,12 @@
 package Vues;
 
+import database.oracleDB;
+
+import javax.swing.table.DefaultTableModel;
 import java.awt.Component;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,10 +24,17 @@ public class MainVue extends javax.swing.JFrame {
      * Creates new form MainVue
      */
     Component[] components;
+    oracleDB db;
     
     public MainVue() {
         initComponents();
-        PanelDetails.setVisible(false); 
+        PanelDetails.setVisible(false);
+
+        try {
+            db = new oracleDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -33,18 +46,18 @@ public class MainVue extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        searchTB = new javax.swing.JTextField();
         titleLabel = new javax.swing.JLabel();
         rechLabel = new javax.swing.JLabel();
         PanelDetails = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        idLabel = new javax.swing.JLabel();
+        idTF = new javax.swing.JTextField();
+        acteurLabel = new javax.swing.JLabel();
+        realisateurLabel = new javax.swing.JLabel();
+        acteursTF = new javax.swing.JTextField();
+        realisateurTB = new javax.swing.JTextField();
+        anneeLabel = new javax.swing.JLabel();
+        dateTF = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         criteresButton = new javax.swing.JButton();
         searchButton = new javax.swing.JButton();
@@ -58,38 +71,36 @@ public class MainVue extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("jTextField1");
-
         titleLabel.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(0, 0, 102));
         titleLabel.setText("Rennequinepolis");
 
         rechLabel.setText("Rechercher un film :");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Id Film :");
+        idLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        idLabel.setText("Id Film :");
 
-        jTextField2.setText("Id");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        idTF.setText("Id");
+        idTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                idTFActionPerformed(evt);
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel4.setText("Acteurs :");
+        acteurLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        acteurLabel.setText("Acteurs :");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel5.setText("Réalisateurs :");
+        realisateurLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        realisateurLabel.setText("Réalisateurs :");
 
-        jTextField3.setText("acteur 1, acteur2");
+        acteursTF.setText("acteur 1, acteur2");
 
-        jTextField4.setText("Real1, real2");
+        realisateurTB.setText("Real1, real2");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText("Année :");
+        anneeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        anneeLabel.setText("Année :");
 
-        jTextField5.setText("date sortie");
+        dateTF.setText("date sortie");
 
         javax.swing.GroupLayout PanelDetailsLayout = new javax.swing.GroupLayout(PanelDetails);
         PanelDetails.setLayout(PanelDetailsLayout);
@@ -100,21 +111,21 @@ public class MainVue extends javax.swing.JFrame {
                 .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelDetailsLayout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addComponent(jLabel3)
+                        .addComponent(idLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
+                        .addComponent(anneeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(PanelDetailsLayout.createSequentialGroup()
                         .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(acteurLabel)
+                            .addComponent(realisateurLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                            .addComponent(jTextField4))
+                            .addComponent(acteursTF, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                            .addComponent(realisateurTB))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -123,18 +134,18 @@ public class MainVue extends javax.swing.JFrame {
             .addGroup(PanelDetailsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(idLabel)
+                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(anneeLabel)
+                    .addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(acteurLabel)
+                    .addComponent(acteursTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(realisateurLabel)
+                    .addComponent(realisateurTB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -200,7 +211,7 @@ public class MainVue extends javax.swing.JFrame {
                                 .addGap(41, 41, 41)
                                 .addComponent(titleLabel))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchTB, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(rechLabel)
                                     .addGap(27, 27, 27)
@@ -222,7 +233,7 @@ public class MainVue extends javax.swing.JFrame {
                     .addComponent(rechLabel)
                     .addComponent(criteresButton))
                 .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchTB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(searchButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -251,18 +262,32 @@ public class MainVue extends javax.swing.JFrame {
         
     }//GEN-LAST:event_criteresButtonActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void idTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_idTFActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-      /* JTable table = new JTable();
+        DefaultTableModel dtm = new DefaultTableModel();
+        ResultSet res = null;
+        try {
+            if (!PanelDetails.isVisible())
+                res = db.getMovie(idTF.getText());
 
-       JScrollPane tableContainer = new JScrollPane(table);
+            ResultSetMetaData meta = res.getMetaData();
+            int numberOfColumns = meta.getColumnCount();
+            while (res.next()) {
+                Object[] rowData = new Object[numberOfColumns];
+                for (int i = 0; i < rowData.length; ++i) {
+                    rowData[i] = res.getObject(i + 1);
+                }
+                dtm.addRow(rowData);
+            }
+            ResultatJTable.setModel(dtm);
+            dtm.fireTableDataChanged();
+        }catch(Exception e)
+        {
 
-       PanelDetails.add(tableContainer, BorderLayout.CENTER); 
-       PanelDetails.setVisible(true);       // TODO add your handling code here:
-       PanelDetails.repaint();*/
+        }
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void ResultatJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResultatJTableMouseClicked
@@ -308,24 +333,24 @@ public class MainVue extends javax.swing.JFrame {
     private javax.swing.JPanel PanelDetails;
     private javax.swing.JTable ResultatJTable;
     private javax.swing.JScrollPane ScrollPane1;
+    private javax.swing.JLabel acteurLabel;
+    private javax.swing.JTextField acteursTF;
+    private javax.swing.JLabel anneeLabel;
     private javax.swing.JButton criteresButton;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField dateTF;
+    private javax.swing.JLabel idLabel;
+    private javax.swing.JTextField idTF;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JLabel realisateurLabel;
+    private javax.swing.JTextField realisateurTB;
     private javax.swing.JLabel rechLabel;
     private javax.swing.JButton searchButton;
+    private javax.swing.JTextField searchTB;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

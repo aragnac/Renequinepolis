@@ -9,6 +9,7 @@ import database.Tables.Status;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+import oracle.jdbc.OracleTypes;
 
 public class oracleDB {
 
@@ -73,22 +74,39 @@ public class oracleDB {
         }
     }
 
-    private void getMovies(int start, int take, String id)
+    public ResultSet getMovie(String id)
+    {
+        ResultSet rs = null;
+
+        try {
+            callabStat = Con.prepareCall("? = call RechFilm.GetMovie(?)");
+            callabStat.registerOutParameter(1, OracleTypes.CURSOR);
+            //ID
+            if(Pattern.matches("\\d+", id))
+                callabStat.setInt(1, Integer.parseInt(id));
+            else callabStat.setNull(1, Types.INTEGER);
+
+            rs = (ResultSet) callabStat.getObject(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
+
+    /*
+    * Retourne un tableau contenant tous les films résultant de la recherche.
+    */
+    /*private Object[] getMovies(String titre)
     {
         try
         {
-            /** Ici il faut modifier le nom de la procedure et le nombre de param **/
-            callabStat = Con.prepareCall("{call " + dbname + ".EVALFILM_GETMOVIE(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+            // Ici il faut modifier le nom de la procedure et le nombre de param
+            callabStat = Con.prepareCall("{call " + dbname + ".EVALFILM_GETMOVIE(?, ?, ?, ?, ?)}");
 
-            //Position
-            callabStat.setInt(1, start);
-            callabStat.setInt(2, take);
-
-            //ID
-            if(Pattern.matches("\\d+", id))
-                callabStat.setInt(3, Integer.parseInt(IDBox.getText()));
-            else callabStat.setNull(3, Types.INTEGER);
-
+            //Titre
+            callabStat.setString(1, '%' + SearchBox.getText().toLowerCase() + '%');
             //Acteurs
             ArrayList<Infos> actors = new ArrayList<>();
             if(!ActorsBox.getText().isEmpty())
@@ -104,9 +122,6 @@ public class oracleDB {
                 else prepStat.setNull(4, Types.ARRAY, "ARRAY_INFOS");
             }
             else prepStat.setNull(4, Types.ARRAY, "ARRAY_INFOS");
-
-            //Titre
-            prepStat.setString(5, '%' + SearchBox.getText().toLowerCase() + '%');
 
             //Réalisateur
             ArrayList<Infos> real = new ArrayList<>();
@@ -176,5 +191,5 @@ public class oracleDB {
                             m.getRuntime()
                     });
         }
-    }
+    }*/
 }
