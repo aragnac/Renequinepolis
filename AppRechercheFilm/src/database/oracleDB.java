@@ -7,9 +7,12 @@ import database.Tables.Movies;
 import database.Tables.Status;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 import oracle.jdbc.OracleTypes;
+import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor;
 
 public class oracleDB {
 
@@ -98,98 +101,37 @@ public class oracleDB {
     /*
     * Retourne un tableau contenant tous les films résultant de la recherche.
     */
-    /*private Object[] getMovies(String titre)
+    public ResultSet getMovies(String titre, ArrayList acteurs, ArrayList producteurs, String date)
     {
+        ResultSet rs = null;
+
         try
         {
-            // Ici il faut modifier le nom de la procedure et le nombre de param
-            callabStat = Con.prepareCall("{call " + dbname + ".EVALFILM_GETMOVIE(?, ?, ?, ?, ?)}");
+            ArrayDescriptor array_artistsDesc = ArrayDescriptor.createDescriptor("CB.ARRAY_INFOS", Con);
+
+            callabStat = Con.prepareCall("? = call  RechFilm.GetMovies(?, ?, ?, ?, ?)");
+            callabStat.registerOutParameter(1, OracleTypes.CURSOR);
 
             //Titre
-            callabStat.setString(1, '%' + SearchBox.getText().toLowerCase() + '%');
-            //Acteurs
-            ArrayList<Infos> actors = new ArrayList<>();
-            if(!ActorsBox.getText().isEmpty())
-            {
-                String[] tmp = ActorsBox.getText().toLowerCase().split(";");
-                for (String s : tmp)
-                    actors.add(new Infos(s));
-                if(!actors.isEmpty())
-                {
-                    Array array = new ARRAY(array_artistsDesc, con, actors.toArray());
-                    prepStat.setArray(4, array);
-                }
-                else prepStat.setNull(4, Types.ARRAY, "ARRAY_INFOS");
-            }
-            else prepStat.setNull(4, Types.ARRAY, "ARRAY_INFOS");
+            callabStat.setString(2, titre);
+
+            //Liste Acteurs
+            Array array = new ARRAY(array_artistsDesc, Con, acteurs.toArray());
+            callabStat.setArray(3, array);
 
             //Réalisateur
-            ArrayList<Infos> real = new ArrayList<>();
-            if(!DirBox.getText().isEmpty())
-            {
-                String[] tmp = DirBox.getText().toLowerCase().split(";");
-                System.out.println(java.util.Arrays.toString(tmp));
-                for (String s : tmp)
-                    real.add(new Infos(s));
-                if(!real.isEmpty())
-                {
-                    Array array = new ARRAY(array_artistsDesc, con, real.toArray());
-                    prepStat.setArray(6, array);
-                }
-                else prepStat.setNull(6, Types.ARRAY, "ARRAY_INFOS");
-            }
-            else prepStat.setNull(6, Types.ARRAY, "ARRAY_INFOS");
+            Array arrayr = new ARRAY(array_artistsDesc, Con, producteurs.toArray());
+            callabStat.setArray(4, arrayr);
 
             //Date
-            prepStat.setInt(7, ComboDate.getSelectedIndex());
-            if(Pattern.matches("\\d+", DateBox.getText()))
-                prepStat.setInt(8, Integer.parseInt(DateBox.getText()));
-            else prepStat.setNull(8, Types.INTEGER);
+            callabStat.setString(2, date);
 
-            //Movies
-            prepStat.registerOutParameter(9, Types.ARRAY, "ARRAY_MOVIES");
-
-            System.out.println("--Execute");
-            prepStat.execute();
-            System.out.println("--Executed");
-
-            Movies = (Object[])(((Array)prepStat.getObject(9)).getArray());
+            rs = (ResultSet) callabStat.getObject(1);
         }
         catch (SQLException ex)
         {
-            System.out.println(ex);
-            if(ex.getClass() == SQLRecoverableException.class)
-            {
-                ConnectToCB();
-                getMovies();
-            }
-        }
 
-        DefaultTableModel dtm;
-        FilmTable.setModel(dtm = new DefaultTableModel(
-                new String []
-                        {
-                                "Title",
-                                "Release_Date",
-                                "Runtime"
-                        },0)
-        {
-            @Override
-            public boolean isCellEditable(int row, int col)
-            {
-                return false;
-            }
-        });
-        if(Movies == null)return;
-        for(Object o : Movies)
-        {
-            Movies m = (Movies)o;
-            dtm.addRow(new Object[]
-                    {
-                            m.getTitle(),
-                            m.getRelease_Date(),
-                            m.getRuntime()
-                    });
         }
-    }*/
+        return rs;
+    }
 }
