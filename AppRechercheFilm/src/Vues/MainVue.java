@@ -1,12 +1,13 @@
 package Vues;
 
 import database.oracleDB;
+import oracle.sql.ARRAY;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.Component;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -272,6 +273,9 @@ public class MainVue extends javax.swing.JFrame {
         try {
             if (!PanelDetails.isVisible())
                 res = db.getMovie(idTF.getText());
+            else
+                res = db.getMovies(searchTB.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
+
 
             ResultSetMetaData meta = res.getMetaData();
             int numberOfColumns = meta.getColumnCount();
@@ -289,6 +293,23 @@ public class MainVue extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private ArrayList stringToArrayList(String items)
+    {
+        ArrayList<String> actors;
+        if(items != null)
+        {
+            actors = new ArrayList<>();
+
+            String[] tmp = acteursTF.getText().toLowerCase().split(",");
+            Collections.addAll(actors, tmp);
+
+        }
+        else
+            return null;
+
+        return actors;
+    }
 
     private void ResultatJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResultatJTableMouseClicked
 
