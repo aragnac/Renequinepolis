@@ -20,9 +20,9 @@ BEGIN
     WITH temp (id, chaine, start_pos, end_pos) AS (
       SELECT
         id,
-        directors,
+        actors,
         1,
-        instr(directors, unistr('\2016'), 1)
+        instr(actors, unistr('\2016'), 1)
       FROM movies_ext
       UNION ALL
       SELECT
@@ -34,15 +34,9 @@ BEGIN
       WHERE end_pos != 0
     )
     SELECT
-      (substr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
-        THEN length(chaine) + 1
-                                         ELSE end_pos END) - start_pos), 1,
-              instr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
-                THEN length(chaine) + 1
-                                               ELSE end_pos END) - start_pos), unistr('\2024'), 1) - 1)) AS id,
-      substr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
-        THEN length(chaine) + 1
-                                        ELSE end_pos END) - start_pos),
+      (substr(substr(chaine, start_pos, (CASE WHEN end_pos = 0 THEN length(chaine) + 1 ELSE end_pos END) - start_pos), 1,
+              instr(substr(chaine, start_pos, (CASE WHEN end_pos = 0 THEN length(chaine) + 1 ELSE end_pos END) - start_pos), unistr('\2024'), 1) - 1)) AS id,
+      substr(substr(chaine, start_pos, (CASE WHEN end_pos = 0 THEN length(chaine) + 1 ELSE end_pos END) - start_pos),
              instr(substr(chaine, start_pos, (CASE WHEN end_pos = 0
                THEN length(chaine) + 1
                                               ELSE end_pos END) - start_pos), unistr('\2024'), 1) + 1,

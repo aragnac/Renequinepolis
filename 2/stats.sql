@@ -14,10 +14,11 @@ CREATE TABLE stats (
   quant95       NUMBER,
   valdistinctes NUMBER
 );
-@StatsDirecteur
-@StatsActeur
-@StatsGenre
-@MoviesStats
+@2/StatsDirecteur
+@2/StatsActeur
+@2/StatsGenre
+@2/MoviesStats
+--UTLFILE
 SELECT *
 FROM stats
 ORDER BY champ;
