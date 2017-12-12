@@ -3,6 +3,7 @@ package Vues;
 import Tables.Movies;
 import Tools.BDRenequinepolis;
 import Tools.BdType;
+import Tools.FilmDetails;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -19,13 +20,13 @@ import java.util.Vector;
 public class MainVue extends javax.swing.JFrame {
     private Component[] components;
     private BDRenequinepolis db;
-    private Movies movie;
-    private List<Movies> listMovies = new ArrayList<>();
+    private ResultSet resMovies;
+    private FilmDetails filmDet;
+
 
     public MainVue() {
         initComponents();
         PanelDetails.setVisible(false);
-        movie = new Movies();
 
         try {
             db = new BDRenequinepolis(BdType.Oracle);
@@ -144,10 +145,10 @@ public class MainVue extends javax.swing.JFrame {
                 return false;
             }
         };
-        ResultSet res;
+        //ResultSet res;
         try {
-            if (!PanelDetails.isVisible()) res = db.getMovie(idTF.getText());
-            else res = db.getMovies(nomTF.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
+            if (!PanelDetails.isVisible()) resMovies = db.getMovie(idTF.getText());
+            else resMovies = db.getMovies(nomTF.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
 
 //            ResultSetMetaData meta = res.getMetaData();
 //            if (!PanelDetails.isVisible()) {
@@ -161,7 +162,7 @@ public class MainVue extends javax.swing.JFrame {
 //                }
 //            }
 
-            ResultSetMetaData meta = res.getMetaData();
+            ResultSetMetaData meta = resMovies.getMetaData();
             int numberOfColumns = meta.getColumnCount();
 
             Vector id = new Vector();
@@ -169,10 +170,10 @@ public class MainVue extends javax.swing.JFrame {
                 id.add(meta.getColumnName(i));
             Vector<Vector<Object>> v = new Vector<>();
 
-            while (res.next()) {
+            while (resMovies.next()) {
                 Vector<Object> vv = new Vector<>();
                 for (int i = 1; i <= numberOfColumns; ++i) {
-                    vv.add(res.getObject(i));
+                    vv.add(resMovies.getObject(i));
                 }
                 v.add(vv);
             }
@@ -182,21 +183,6 @@ public class MainVue extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_searchButtonActionPerformed
-
-    private void AjoutTable() {
-        DefaultTableModel dtm = new DefaultTableModel();
-
-        for (Movies m : listMovies) {
-            Object[] o = new Object[4];
-            o[0] = m.getTitle();
-            o[1] = m.getOriginal_Title();
-            o[2] = m.getRelease_Date();
-            o[3] = m.getStatus();
-            dtm.addRow(o);
-        }
-        ResultatJTable.setModel(dtm);
-        dtm.fireTableDataChanged();
-    }
 
     private ArrayList stringToArrayList(String items) {
         ArrayList<String> actors;
@@ -215,13 +201,35 @@ public class MainVue extends javax.swing.JFrame {
     }
 
     private void ResultatJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResultatJTableMouseClicked
+        filmDet = new FilmDetails();
         if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2) {
             int row = ResultatJTable.getSelectedRow();
             String id = (String) ResultatJTable.getValueAt(row, 0);
-            new DetailsFilm(db.getConnection(), id).setVisible(true);
-        }
-    }//GEN-LAST:event_ResultatJTableMouseClicked
-
+            try {
+                while (resMovies.next()) {
+                    //Quand on retrouve l'id correspondant dans le resultset, on recupère les données
+                    if (resMovies.getInt(1) == Integer.parseInt(id)) {
+                        filmDet = new FilmDetails(resMovies.getInt(1),
+                                resMovies.getString(2),
+                                resMovies.getString(3),
+                                resMovies.getString(4),
+                                resMovies.getDate(5),
+                                resMovies.getDouble(6),
+                                resMovies.getInt(7),
+                                resMovies.getString(8),
+                                resMovies.getLong(9),
+                                resMovies.getBlob(10),
+                                db.getActors(resMovies.getString(1)),
+                                db.getDirectors(resMovies.getString(1)),
+                                null);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            new DetailsFilm(filmDet).setVisible(true);
+        }//GEN-LAST:event_ResultatJTableMouseClicked
+    }
     /**
      * @param args the command line arguments
      */

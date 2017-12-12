@@ -1,5 +1,6 @@
 package Tools;
 
+import java.sql.Blob;
 import java.sql.Date;
 import java.util.List;
 import java.util.Vector;
@@ -14,6 +15,7 @@ public class FilmDetails {
     private double Moyenne_Vote;
     private String Certification;
     private long Duree;
+    private Blob Poster;
     private Vector<String> LActor;
     private Vector<String> LDirector;
     private Vector<String> LGenre;
@@ -54,6 +56,8 @@ public class FilmDetails {
         return Duree;
     }
 
+    public Blob getPoster(){return Poster;}
+
     public Vector<String> getLActor() {
         return LActor;
     }
@@ -76,12 +80,13 @@ public class FilmDetails {
         Moyenne_Vote = -1;
         Certification = "";
         Duree = -1;
+        Poster = null;
         LActor = null;
         LDirector = null;
         LGenre = null;
     }
 
-    public FilmDetails(int id, String titre, String titreOriginal, String status, Date dateSortie, int vote_Count, double moyenne_Vote, String certification, long duree, Vector<String> LActor, Vector<String> LDirector, Vector<String> LGenre) {
+    public FilmDetails(int id, String titre, String titreOriginal, String status, Date dateSortie, double moyenne_Vote, int vote_Count, String certification, long duree, Blob poster,Vector<String> LActor, Vector<String> LDirector, Vector<String> LGenre) {
         Id = id;
         Titre = titre;
         TitreOriginal = titreOriginal;
@@ -91,6 +96,7 @@ public class FilmDetails {
         Moyenne_Vote = moyenne_Vote;
         Certification = certification;
         Duree = duree;
+        Poster = poster;
         this.LActor = LActor;
         this.LDirector = LDirector;
         this.LGenre = LGenre;

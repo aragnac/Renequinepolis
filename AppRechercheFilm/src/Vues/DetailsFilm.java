@@ -2,6 +2,8 @@ package Vues;
 
 import Tools.FilmDetails;
 import java.sql.Connection;
+import java.sql.Date;
+import java.text.DateFormat;
 
 public class DetailsFilm extends javax.swing.JFrame {
 
@@ -24,6 +26,7 @@ public class DetailsFilm extends javax.swing.JFrame {
 
     public DetailsFilm(FilmDetails fd) {
         actuel = fd;
+        setupFilm();
     }
 
     private void setupFilm() {

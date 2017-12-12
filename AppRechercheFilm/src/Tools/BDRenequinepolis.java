@@ -7,6 +7,7 @@ import oracle.sql.ArrayDescriptor;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.regex.Pattern;
 
 public class BDRenequinepolis extends Bd {
@@ -81,4 +82,55 @@ public class BDRenequinepolis extends Bd {
         return rs;
     }
 
+    public Vector<String> getActors(String id){
+        Vector<String> actors = null;
+        ResultSet rs = null;
+        CallableStatement cs;
+        try {
+            cs = Connection.prepareCall("{? = call RechFilm.GetActorsFromMovie(?)}");
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            //ID
+            if (Pattern.matches("\\d+", id)) cs.setInt(2, Integer.parseInt(id));
+            else cs.setNull(2, Types.INTEGER);
+            cs.execute();
+            rs = (ResultSet)cs.getObject(1);
+
+            actors = new Vector<>();
+            while (rs.next())
+            {
+                actors.addElement(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return actors;
+    }
+
+    public Vector<String> getDirectors(String id){
+        Vector<String> directors = null;
+        ResultSet rs = null;
+        CallableStatement cs;
+        try {
+            cs = Connection.prepareCall("{? = call RechFilm.GetDirectorsFromMovie(?)}");
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            //ID
+            if (Pattern.matches("\\d+", id)) cs.setInt(2, Integer.parseInt(id));
+            else cs.setNull(2, Types.INTEGER);
+            cs.execute();
+            rs = (ResultSet)cs.getObject(1);
+
+            directors = new Vector<>();
+            while (rs.next())
+            {
+                directors.addElement(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return directors;
+    }
+
+    /*public Vector getGenre(String id){
+
+    }*/
 }
