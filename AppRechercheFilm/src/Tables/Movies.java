@@ -1,22 +1,17 @@
 package Tables;
 
-import java.sql.Blob;
-import java.sql.Date;
-import java.sql.SQLData;
-import java.sql.SQLException;
-import java.sql.SQLInput;
-import java.sql.SQLOutput;
+import java.sql.*;
 
-public class Movies implements SQLData
+public class Movies
 {
     private int ID;
     private String Title;
     private String Original_Title;
-    private int Status;
+    private String Status;
     private Date Release_Date;
     private int Vote_Average;
     private int Vote_Count;
-    private int Certification;
+    private String Certification;
     private int Runtime;
     private Blob Poster;
 
@@ -33,8 +28,8 @@ public class Movies implements SQLData
     public String getOriginal_Title(){return Original_Title;}
     public void setOriginal_Title(String Original_Title){this.Original_Title = Original_Title;}
 
-    public int getStatus(){return Status;}
-    public void setStatus(int Status){this.Status = Status;}
+    public String getStatus(){return Status;}
+    public void setStatus(String Status){this.Status = Status;}
 
     public Date getRelease_Date(){return Release_Date;}
     public void setRelease_Date(Date Release_Date){this.Release_Date = Release_Date;}
@@ -45,8 +40,8 @@ public class Movies implements SQLData
     public int getVote_Count(){return Vote_Count;}
     public void setVote_Count(int Vote_Count){this.Vote_Count = Vote_Count;}
 
-    public int getCertification(){return Certification;}
-    public void setCertification(int Certification){this.Certification = Certification;}
+    public String getCertification(){return Certification;}
+    public void setCertification(String Certification){this.Certification = Certification;}
 
     public int getRuntime(){return Runtime;}
     public void setRuntime(int Runtime){this.Runtime = Runtime;}
@@ -54,40 +49,22 @@ public class Movies implements SQLData
     public Blob getPoster(){return Poster;}
     public void setPoster(Blob Poster){this.Poster = Poster;}
 
-    @Override
-    public String getSQLTypeName() throws SQLException
-    {
-        return "MOVIES";
-    }
 
-    @Override
-    public void readSQL(SQLInput stream, String typeName) throws SQLException
-    {
-        setID(stream.readInt());
-        setTitle(stream.readString());
-        setOriginal_Title(stream.readString());
-        setStatus(stream.readInt());
-        setRelease_Date(stream.readDate());
-        setVote_Average(stream.readInt());
-        setVote_Count(stream.readInt());
-        setCertification(stream.readInt());
-        setRuntime(stream.readInt());
-        setPoster(stream.readBlob());
-    }
-
-    @Override
-    public void writeSQL(SQLOutput stream) throws SQLException
-    {
-        stream.writeInt(getID());
-        stream.writeString(getTitle());
-        stream.writeString(getOriginal_Title());
-        stream.writeInt(getStatus());
-        stream.writeDate(getRelease_Date());
-        stream.writeInt(getVote_Average());
-        stream.writeInt(getVote_Count());
-        stream.writeInt(getCertification());
-        stream.writeInt(getRuntime());
-        stream.writeBlob(getPoster());
+    public void getMovieFromResultset(ResultSet res){
+        try {
+            ID = res.getInt(1);
+            Title = res.getString(2);
+            Original_Title = res.getString(3);
+            Status = res.getString(4);
+            Release_Date = res.getDate(5);
+            Vote_Average = res.getInt(6);
+            Vote_Count = res.getInt(7);
+            Certification = res.getString(8);
+            Runtime = res.getInt(9);
+            Poster = res.getBlob(10);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

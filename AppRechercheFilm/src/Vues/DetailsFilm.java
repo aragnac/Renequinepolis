@@ -1,9 +1,12 @@
 package Vues;
 
 import Tools.FilmDetails;
+import java.sql.Connection;
 
 public class DetailsFilm extends javax.swing.JFrame {
 
+    Connection db;
+    String idFilm;
     private FilmDetails actuel;
 
     /**
@@ -11,6 +14,12 @@ public class DetailsFilm extends javax.swing.JFrame {
      */
     public DetailsFilm() {
         initComponents();
+    }
+
+    public DetailsFilm(Connection base, String id) {
+        initComponents();
+        db = base;
+        idFilm = id;
     }
 
     public DetailsFilm(FilmDetails fd) {
