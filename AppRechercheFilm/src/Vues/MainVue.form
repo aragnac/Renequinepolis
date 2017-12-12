@@ -43,14 +43,6 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jSeparator1" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="PanelDetails" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jSeparator2" alignment="1" max="32767" attributes="0"/>
-                  <Component id="jSeparator3" alignment="1" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -58,7 +50,7 @@
                               <Component id="titleLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                              <Component id="searchTB" min="-2" pref="318" max="-2" attributes="0"/>
+                              <Component id="idTF" min="-2" pref="318" max="-2" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="rechLabel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
@@ -72,7 +64,20 @@
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="ScrollPane1" alignment="0" pref="554" max="32767" attributes="0"/>
+                  <Component id="ScrollPane1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jSeparator2" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="PanelDetails" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator1" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator3" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -89,15 +94,16 @@
                   <Component id="criteresButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="searchTB" min="-2" max="-2" attributes="0"/>
+              <Component id="idTF" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="searchButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jSeparator3" min="-2" pref="10" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      <Component id="PanelDetails" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jSeparator3" min="-2" pref="10" max="-2" attributes="0"/>
+                          <Component id="PanelDetails" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
@@ -111,7 +117,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JTextField" name="searchTB">
+    <Component class="javax.swing.JTextField" name="idTF">
     </Component>
     <Component class="javax.swing.JLabel" name="titleLabel">
       <Properties>
@@ -136,31 +142,22 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                          <Component id="idLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="idTF" min="-2" pref="45" max="-2" attributes="0"/>
-                          <EmptySpace pref="256" max="32767" attributes="0"/>
-                          <Component id="anneeLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="dateTF" min="-2" pref="76" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="acteurLabel" min="-2" max="-2" attributes="0"/>
-                              <Component id="realisateurLabel" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="acteursTF" pref="111" max="32767" attributes="0"/>
-                              <Component id="realisateurTB" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="NbLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="acteurLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="realisateurLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="realisateurTB" alignment="1" max="32767" attributes="0"/>
+                      <Component id="acteursTF" alignment="1" pref="200" max="32767" attributes="0"/>
+                      <Component id="nomTF" pref="200" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
+                  <Component id="anneeLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="dateTF" min="-2" pref="76" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -169,8 +166,8 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="idLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="idTF" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="NbLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="nomTF" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="anneeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="dateTF" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -190,21 +187,15 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="idLabel">
+        <Component class="javax.swing.JLabel" name="NbLabel">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Id Film :"/>
+            <Property name="text" type="java.lang.String" value="Nom du film:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="idTF">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Id"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="idTFActionPerformed"/>
-          </Events>
+        <Component class="javax.swing.JTextField" name="nomTF">
         </Component>
         <Component class="javax.swing.JLabel" name="acteurLabel">
           <Properties>
@@ -223,14 +214,8 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="acteursTF">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="acteur 1, acteur2"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="realisateurTB">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Real1, real2"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="anneeLabel">
           <Properties>
@@ -241,9 +226,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="dateTF">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="date sortie"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>

@@ -1,39 +1,33 @@
 package Vues;
 
-import database.oracleDB;
-import oracle.sql.ARRAY;
+import Tools.BDRenequinepolis;
+import Tools.BdType;
 
 import javax.swing.table.DefaultTableModel;
-import java.awt.Component;
-import java.sql.*;
+import java.awt.*;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Vector;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Nicolas
- */
 public class MainVue extends javax.swing.JFrame {
 
     /**
      * Creates new form MainVue
      */
     Component[] components;
-    oracleDB db;
-    
+    BDRenequinepolis db;
+
     public MainVue() {
         initComponents();
         PanelDetails.setVisible(false);
 
         try {
-            db = new oracleDB();
-        } catch (SQLException e) {
+            db = new BDRenequinepolis(BdType.Oracle);
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -47,12 +41,12 @@ public class MainVue extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        searchTB = new javax.swing.JTextField();
+        idTF = new javax.swing.JTextField();
         titleLabel = new javax.swing.JLabel();
         rechLabel = new javax.swing.JLabel();
         PanelDetails = new javax.swing.JPanel();
-        idLabel = new javax.swing.JLabel();
-        idTF = new javax.swing.JTextField();
+        NbLabel = new javax.swing.JLabel();
+        nomTF = new javax.swing.JTextField();
         acteurLabel = new javax.swing.JLabel();
         realisateurLabel = new javax.swing.JLabel();
         acteursTF = new javax.swing.JTextField();
@@ -78,15 +72,8 @@ public class MainVue extends javax.swing.JFrame {
 
         rechLabel.setText("Rechercher un film :");
 
-        idLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        idLabel.setText("Id Film :");
-
-        idTF.setText("Id");
-        idTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idTFActionPerformed(evt);
-            }
-        });
+        NbLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        NbLabel.setText("Nom du film:");
 
         acteurLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         acteurLabel.setText("Acteurs :");
@@ -94,61 +81,13 @@ public class MainVue extends javax.swing.JFrame {
         realisateurLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         realisateurLabel.setText("Réalisateurs :");
 
-        acteursTF.setText("acteur 1, acteur2");
-
-        realisateurTB.setText("Real1, real2");
-
         anneeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         anneeLabel.setText("Année :");
 
-        dateTF.setText("date sortie");
-
         javax.swing.GroupLayout PanelDetailsLayout = new javax.swing.GroupLayout(PanelDetails);
         PanelDetails.setLayout(PanelDetailsLayout);
-        PanelDetailsLayout.setHorizontalGroup(
-            PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelDetailsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelDetailsLayout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(idLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
-                        .addComponent(anneeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelDetailsLayout.createSequentialGroup()
-                        .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(acteurLabel)
-                            .addComponent(realisateurLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(acteursTF, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                            .addComponent(realisateurTB))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        PanelDetailsLayout.setVerticalGroup(
-            PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelDetailsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(idLabel)
-                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(anneeLabel)
-                    .addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(acteurLabel)
-                    .addComponent(acteursTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(realisateurLabel)
-                    .addComponent(realisateurTB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        PanelDetailsLayout.setHorizontalGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(PanelDetailsLayout.createSequentialGroup().addContainerGap().addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false).addComponent(NbLabel).addComponent(acteurLabel).addComponent(realisateurLabel)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(realisateurTB, javax.swing.GroupLayout.Alignment.TRAILING).addComponent(acteursTF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE).addComponent(nomTF, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)).addGap(80, 80, 80).addComponent(anneeLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        PanelDetailsLayout.setVerticalGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(PanelDetailsLayout.createSequentialGroup().addContainerGap().addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(NbLabel).addComponent(nomTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(anneeLabel).addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(acteurLabel).addComponent(acteursTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(PanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(realisateurLabel).addComponent(realisateurTB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         criteresButton.setText("Plus de critères");
         criteresButton.addActionListener(new java.awt.event.ActionListener() {
@@ -164,17 +103,7 @@ public class MainVue extends javax.swing.JFrame {
             }
         });
 
-        ResultatJTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Id", "titre", "Date sortie",
-            }
-        ));
+        ResultatJTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{{null, null, null}, {null, null, null}, {null, null, null}, {null, null, null}}, new String[]{"Id", "titre", "Date sortie",}));
         ResultatJTable.setCellSelectionEnabled(true);
         ResultatJTable.setEnabled(false);
         ResultatJTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -194,119 +123,65 @@ public class MainVue extends javax.swing.JFrame {
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PanelDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(41, 41, 41)
-                                .addComponent(titleLabel))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(searchTB, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(rechLabel)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(criteresButton)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(108, 108, 108)
-                                .addComponent(searchButton)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(ScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(titleLabel)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rechLabel)
-                    .addComponent(criteresButton))
-                .addGap(18, 18, 18)
-                .addComponent(searchTB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(searchButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(PanelDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(121, 121, 121).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(41, 41, 41).addComponent(titleLabel)).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE).addGroup(layout.createSequentialGroup().addComponent(rechLabel).addGap(27, 27, 27).addComponent(criteresButton))).addGroup(layout.createSequentialGroup().addGap(108, 108, 108).addComponent(searchButton))).addGap(0, 0, Short.MAX_VALUE)).addComponent(ScrollPane1).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jSeparator2).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(PanelDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jSeparator1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jSeparator3))).addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap().addComponent(titleLabel).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(rechLabel).addComponent(criteresButton)).addGap(18, 18, 18).addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(searchButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(PanelDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)).addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(ScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void criteresButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criteresButtonActionPerformed
 
-        if(PanelDetails.isVisible())
-            PanelDetails.setVisible(false);
-        else
-            PanelDetails.setVisible(true);// TODO add your handling code here:
-        
+        if (PanelDetails.isVisible()) PanelDetails.setVisible(false);
+        else PanelDetails.setVisible(true);// TODO add your handling code here:
+
     }//GEN-LAST:event_criteresButtonActionPerformed
 
-    private void idTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idTFActionPerformed
-
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        DefaultTableModel dtm = new DefaultTableModel();
-        ResultSet res = null;
+        DefaultTableModel dtm = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        ResultSet res;
         try {
-            if (!PanelDetails.isVisible())
-                res = db.getMovie(idTF.getText());
-            else
-                res = db.getMovies(searchTB.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
-
+            if (!PanelDetails.isVisible()) res = db.getMovie(idTF.getText());
+            else res = db.getMovies(nomTF.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
 
             ResultSetMetaData meta = res.getMetaData();
             int numberOfColumns = meta.getColumnCount();
-            while (res.next()) {
-                Object[] rowData = new Object[numberOfColumns];
-                for (int i = 0; i < rowData.length; ++i) {
-                    rowData[i] = res.getObject(i + 1);
-                }
-                dtm.addRow(rowData);
-            }
-            ResultatJTable.setModel(dtm);
-            dtm.fireTableDataChanged();
-        }catch(Exception e)
-        {
 
+            Vector id = new Vector();
+            for (int i = 1; i <= meta.getColumnCount(); i++)
+                id.add(meta.getColumnName(i));
+            Vector<Vector<Object>> v = new Vector<>();
+            while (res.next()) {
+                Vector<Object> vv = new Vector<>();
+                for (int i = 1; i <= numberOfColumns; ++i) {
+                    vv.add(res.getObject(i));
+                }
+                v.add(vv);
+            }
+            dtm.setDataVector(v, id);
+            ResultatJTable.setModel(dtm);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
-    private ArrayList stringToArrayList(String items)
-    {
+    private ArrayList stringToArrayList(String items) {
         ArrayList<String> actors;
-        if(items != null)
-        {
+        if (items != null) {
             actors = new ArrayList<>();
-
-            String[] tmp = acteursTF.getText().toLowerCase().split(",");
+            String[] tmp;
+            if (items.contains(","))
+                tmp = items.toLowerCase().split(",");
+            else if (!items.isEmpty()) {
+                tmp = new String[1];
+                tmp[0] = items;
+            } else return null;
             Collections.addAll(actors, tmp);
-
-        }
-        else
-            return null;
+        } else return null;
 
         return actors;
     }
@@ -322,7 +197,7 @@ public class MainVue extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -351,6 +226,7 @@ public class MainVue extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel NbLabel;
     private javax.swing.JPanel PanelDetails;
     private javax.swing.JTable ResultatJTable;
     private javax.swing.JScrollPane ScrollPane1;
@@ -359,7 +235,6 @@ public class MainVue extends javax.swing.JFrame {
     private javax.swing.JLabel anneeLabel;
     private javax.swing.JButton criteresButton;
     private javax.swing.JTextField dateTF;
-    private javax.swing.JLabel idLabel;
     private javax.swing.JTextField idTF;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -367,11 +242,11 @@ public class MainVue extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextField nomTF;
     private javax.swing.JLabel realisateurLabel;
     private javax.swing.JTextField realisateurTB;
     private javax.swing.JLabel rechLabel;
     private javax.swing.JButton searchButton;
-    private javax.swing.JTextField searchTB;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

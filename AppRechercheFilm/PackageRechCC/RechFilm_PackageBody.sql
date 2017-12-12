@@ -40,7 +40,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
       --todo logs
-      OPEN V_RefCursor FOR SELECT id, Title, COALESCE(Release_Date, CURRENT_DATE), Runtime,
+      OPEN V_RefCursor FOR SELECT id, Title, COALESCE(Release_Date, CURRENT_DATE) as Release_Date, Runtime,
                              vote_average, vote_count, poster
                            FROM movie
                              INNER JOIN MOVIE_POSTER ON MOVIE.ID = MOVIE_POSTER.MOVIE

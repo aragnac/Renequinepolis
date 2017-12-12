@@ -1,20 +1,35 @@
-package Vues;/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package Vues;
 
-/**
- *
- * @author Nicolas
- */
+import Tools.FilmDetails;
+
 public class DetailsFilm extends javax.swing.JFrame {
+
+    private FilmDetails actuel;
 
     /**
      * Creates new form DetailsFilm
      */
     public DetailsFilm() {
         initComponents();
+    }
+
+    public DetailsFilm(FilmDetails fd) {
+        actuel = fd;
+    }
+
+    private void setupFilm() {
+        idLabel.setText(String.valueOf(actuel.getId()));
+        titreLabelX.setText(actuel.getTitre());
+        titreOrigiLabelX.setText(actuel.getTitreOriginal());
+        statutLabelX.setText(actuel.getStatus());
+        dateLabelX.setText(actuel.getDateSortie().toString());
+        nbrVotesLabelX.setText(String.valueOf(actuel.getVote_Count()));
+        moyenneLabelX.setText(String.valueOf(actuel.getMoyenne_Vote()));
+        certificationLabelX.setText(actuel.getCertification());
+        runtimeLabelX.setText(/*todo tranformation*/String.valueOf(actuel.getDuree()));
+        acteurList.setListData(actuel.getLActor());
+        directorList.setListData(actuel.getLDirector());
+        genreList.setListData(actuel.getLGenre());
     }
 
     /**
@@ -42,23 +57,26 @@ public class DetailsFilm extends javax.swing.JFrame {
         CertifLabel = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         moyenneLabelX = new javax.swing.JLabel();
-        nbrVolsLabelX = new javax.swing.JLabel();
+        nbrVotesLabelX = new javax.swing.JLabel();
         certificationLabelX = new javax.swing.JLabel();
         dateLabelX = new javax.swing.JLabel();
         runtimeLabelX = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        acteurList = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        directorList = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        genreList = new javax.swing.JList<>();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 141, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 145, Short.MAX_VALUE)
-        );
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 141, Short.MAX_VALUE));
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 145, Short.MAX_VALUE));
 
         afficheLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         afficheLabel.setText("Affiche :");
@@ -96,11 +114,11 @@ public class DetailsFilm extends javax.swing.JFrame {
         CertifLabel.setText("Certification :");
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel14.setText("Runtime :");
+        jLabel14.setText("Durée :");
 
         moyenneLabelX.setText("jLabel15");
 
-        nbrVolsLabelX.setText("jLabel16");
+        nbrVotesLabelX.setText("jLabel16");
 
         certificationLabelX.setText("jLabel17");
 
@@ -108,92 +126,28 @@ public class DetailsFilm extends javax.swing.JFrame {
 
         runtimeLabelX.setText("jLabel19");
 
+        acteurList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(acteurList);
+
+        directorList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(directorList);
+
+        jLabel1.setFont(afficheLabel.getFont());
+        jLabel1.setText("Acteurs: ");
+
+        jLabel2.setFont(afficheLabel.getFont());
+        jLabel2.setText("Directeur: ");
+
+        genreList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(genreList);
+
+        jLabel3.setFont(afficheLabel.getFont());
+        jLabel3.setText("Genre: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(afficheLabel)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(idLabel)
-                                    .addComponent(titreLabel)
-                                    .addComponent(titreOLabel)
-                                    .addComponent(statutLabel)
-                                    .addComponent(dateLabel)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(moyenneLabel)
-                                    .addComponent(nbrVotesLabel)
-                                    .addComponent(CertifLabel))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(certificationLabelX)
-                                    .addComponent(moyenneLabelX)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(nbrVolsLabelX)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel14)))))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dateLabelX)
-                            .addComponent(statutLabelX)
-                            .addComponent(titreOrigiLabelX)
-                            .addComponent(titreLabelX)
-                            .addComponent(idLabelX)
-                            .addComponent(runtimeLabelX))))
-                .addContainerGap(57, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(afficheLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(idLabel)
-                            .addComponent(idLabelX))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(titreLabel)
-                            .addComponent(titreLabelX))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(titreOLabel)
-                            .addComponent(titreOrigiLabelX))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(statutLabel)
-                            .addComponent(statutLabelX))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dateLabel)
-                            .addComponent(dateLabelX))))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(moyenneLabel)
-                    .addComponent(moyenneLabelX))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nbrVotesLabel)
-                    .addComponent(nbrVolsLabelX)
-                    .addComponent(jLabel14)
-                    .addComponent(runtimeLabelX))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CertifLabel)
-                    .addComponent(certificationLabelX))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addGroup(layout.createSequentialGroup().addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(30, 30, 30).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(idLabel).addComponent(titreLabel).addComponent(titreOLabel).addComponent(statutLabel).addComponent(dateLabel))).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(moyenneLabel).addComponent(nbrVotesLabel).addComponent(CertifLabel)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(certificationLabelX).addComponent(moyenneLabelX).addGroup(layout.createSequentialGroup().addComponent(nbrVotesLabelX).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jLabel14))))).addGap(36, 36, 36).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(dateLabelX).addComponent(statutLabelX).addComponent(titreOrigiLabelX).addComponent(titreLabelX).addComponent(idLabelX).addComponent(runtimeLabelX))).addComponent(afficheLabel)).addGap(45, 45, 45).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel1)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel2)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jLabel3).addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(14, 14, 14).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(afficheLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel1).addComponent(jLabel2).addComponent(jLabel3))).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(jScrollPane3).addComponent(jScrollPane2).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(idLabel).addComponent(idLabelX)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(titreLabel).addComponent(titreLabelX)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(titreOLabel).addComponent(titreOrigiLabelX)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(statutLabel).addComponent(statutLabelX)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(dateLabel).addComponent(dateLabelX)))).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(moyenneLabel).addComponent(moyenneLabelX)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(nbrVotesLabel).addComponent(nbrVotesLabelX).addComponent(jLabel14).addComponent(runtimeLabelX)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(CertifLabel).addComponent(certificationLabelX))).addComponent(jScrollPane1)).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -205,7 +159,7 @@ public class DetailsFilm extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -235,18 +189,27 @@ public class DetailsFilm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CertifLabel;
+    private javax.swing.JList<String> acteurList;
     private javax.swing.JLabel afficheLabel;
     private javax.swing.JLabel certificationLabelX;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel dateLabelX;
+    private javax.swing.JList<String> directorList;
+    private javax.swing.JList<String> genreList;
     private javax.swing.JLabel idLabel;
     private javax.swing.JLabel idLabelX;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel moyenneLabel;
     private javax.swing.JLabel moyenneLabelX;
-    private javax.swing.JLabel nbrVolsLabelX;
     private javax.swing.JLabel nbrVotesLabel;
+    private javax.swing.JLabel nbrVotesLabelX;
     private javax.swing.JLabel runtimeLabelX;
     private javax.swing.JLabel statutLabel;
     private javax.swing.JLabel statutLabelX;
