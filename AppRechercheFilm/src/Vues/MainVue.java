@@ -1,5 +1,6 @@
 package Vues;
 
+import database.Tables.Movies;
 import database.oracleDB;
 import oracle.sql.ARRAY;
 
@@ -9,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,10 +29,13 @@ public class MainVue extends javax.swing.JFrame {
      */
     Component[] components;
     oracleDB db;
+    Movies movie;
+    List<Movies> listMovies = new ArrayList<>();
     
     public MainVue() {
         initComponents();
         PanelDetails.setVisible(false);
+        movie = new Movies();
 
         try {
             db = new oracleDB();
@@ -269,16 +274,22 @@ public class MainVue extends javax.swing.JFrame {
     }//GEN-LAST:event_idTFActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        DefaultTableModel dtm = new DefaultTableModel();
         ResultSet res = null;
         try {
-            if (!PanelDetails.isVisible())
+            if (!PanelDetails.isVisible()) {
                 res = db.getMovie(idTF.getText());
-            else
+                movie.getMovieFromResultset(res);
+                listMovies.add(movie);
+            }
+            else {
                 res = db.getMovies(searchTB.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
+                while(res.next())
+                {
+                    movie.getMovieFromResultset(res);
+                }
+            }
 
-
-            ResultSetMetaData meta = res.getMetaData();
+            /*ResultSetMetaData meta = res.getMetaData();
             int numberOfColumns = meta.getColumnCount();
             while (res.next()) {
                 Object[] rowData = new Object[numberOfColumns];
@@ -286,15 +297,28 @@ public class MainVue extends javax.swing.JFrame {
                     rowData[i] = res.getObject(i + 1);
                 }
                 dtm.addRow(rowData);
-            }
-            ResultatJTable.setModel(dtm);
-            dtm.fireTableDataChanged();
+            }*/
         }catch(Exception e)
         {
 
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
+    private void AjoutTable(){
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        for (Movies m : listMovies) {
+            Object[] o = new Object[4];
+            o[0] = m.getTitle();
+            o[1] = m.getOriginal_Title();
+            o[2] = m.getRelease_Date();
+            o[3] = m.getStatus();
+            dtm.addRow(o);
+        }
+
+        ResultatJTable.setModel(dtm);
+        dtm.fireTableDataChanged();
+    }
     private ArrayList stringToArrayList(String items)
     {
         ArrayList<String> actors;
