@@ -1,35 +1,26 @@
 package Vues;
 
+import Tables.Movies;
 import Tools.BDRenequinepolis;
 import Tools.BdType;
-import database.Tables.Movies;
-import database.oracleDB;
-import oracle.sql.ARRAY;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.awt.Component;
-import java.awt.event.MouseEvent;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
 import java.util.List;
+import java.util.Vector;
 
 public class MainVue extends javax.swing.JFrame {
-
-    /**
-     * Creates new form MainVue
-     */
-    Component[] components;
-    BDRenequinepolis db;
-
-    Movies movie;
-    List<Movies> listMovies = new ArrayList<>();
+    private Component[] components;
+    private BDRenequinepolis db;
+    private Movies movie;
+    private List<Movies> listMovies = new ArrayList<>();
 
     public MainVue() {
         initComponents();
@@ -141,7 +132,6 @@ public class MainVue extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void criteresButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criteresButtonActionPerformed
-
         if (PanelDetails.isVisible()) PanelDetails.setVisible(false);
         else PanelDetails.setVisible(true);// TODO add your handling code here:
 
@@ -159,27 +149,26 @@ public class MainVue extends javax.swing.JFrame {
             if (!PanelDetails.isVisible()) res = db.getMovie(idTF.getText());
             else res = db.getMovies(nomTF.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
 
-            ResultSetMetaData meta = res.getMetaData();
-            if (!PanelDetails.isVisible()) {
-                res = db.getMovie(idTF.getText());
-                movie.getMovieFromResultset(res);
-                listMovies.add(movie);
-            }
-            else {
-                res = db.getMovies(searchTB.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
-                while(res.next())
-                {
-                    movie.getMovieFromResultset(res);
-                }
-            }
+//            ResultSetMetaData meta = res.getMetaData();
+//            if (!PanelDetails.isVisible()) {
+//                res = db.getMovie(idTF.getText());
+//                movie.getMovieFromResultset(res);
+//                listMovies.add(movie);
+//            } else {
+//                res = db.getMovies(nomTF.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
+//                while (res.next()) {
+//                    movie.getMovieFromResultset(res);
+//                }
+//            }
 
-            /*ResultSetMetaData meta = res.getMetaData();
+            ResultSetMetaData meta = res.getMetaData();
             int numberOfColumns = meta.getColumnCount();
 
             Vector id = new Vector();
             for (int i = 1; i <= meta.getColumnCount(); i++)
                 id.add(meta.getColumnName(i));
             Vector<Vector<Object>> v = new Vector<>();
+
             while (res.next()) {
                 Vector<Object> vv = new Vector<>();
                 for (int i = 1; i <= numberOfColumns; ++i) {
@@ -194,7 +183,7 @@ public class MainVue extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
-    private void AjoutTable(){
+    private void AjoutTable() {
         DefaultTableModel dtm = new DefaultTableModel();
 
         for (Movies m : listMovies) {
@@ -205,18 +194,16 @@ public class MainVue extends javax.swing.JFrame {
             o[3] = m.getStatus();
             dtm.addRow(o);
         }
-
         ResultatJTable.setModel(dtm);
         dtm.fireTableDataChanged();
     }
-    private ArrayList stringToArrayList(String items)
-    {
+
+    private ArrayList stringToArrayList(String items) {
         ArrayList<String> actors;
         if (items != null) {
             actors = new ArrayList<>();
             String[] tmp;
-            if (items.contains(","))
-                tmp = items.toLowerCase().split(",");
+            if (items.contains(",")) tmp = items.toLowerCase().split(",");
             else if (!items.isEmpty()) {
                 tmp = new String[1];
                 tmp[0] = items;
@@ -228,10 +215,9 @@ public class MainVue extends javax.swing.JFrame {
     }
 
     private void ResultatJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResultatJTableMouseClicked
-        if(evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2)
-        {
+        if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2) {
             int row = ResultatJTable.getSelectedRow();
-            String id = (String)ResultatJTable.getValueAt(row, 0);
+            String id = (String) ResultatJTable.getValueAt(row, 0);
             new DetailsFilm(db.getConnection(), id).setVisible(true);
         }
     }//GEN-LAST:event_ResultatJTableMouseClicked

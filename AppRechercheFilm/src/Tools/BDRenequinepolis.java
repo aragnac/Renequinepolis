@@ -72,7 +72,7 @@ public class BDRenequinepolis extends Bd {
                 cs.setNull(6, Types.VARCHAR);
             }
 
-            cs.execute();
+            boolean result = cs.execute();
 
             rs = (ResultSet) cs.getObject(1);
         } catch (SQLException ex) {

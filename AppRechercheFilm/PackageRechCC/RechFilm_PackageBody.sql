@@ -40,8 +40,14 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
       --todo logs
-      OPEN V_RefCursor FOR SELECT id, Title, COALESCE(Release_Date, CURRENT_DATE) as Release_Date, Runtime,
-                             vote_average, vote_count, poster
+      OPEN V_RefCursor FOR SELECT
+                             id,
+                             Title,
+                             COALESCE(Release_Date, CURRENT_DATE) AS Release_Date,
+                             Runtime,
+                             vote_average,
+                             vote_count,
+                             poster
                            FROM movie
                              INNER JOIN MOVIE_POSTER ON MOVIE.ID = MOVIE_POSTER.MOVIE
                            WHERE id = P_IDMOVIE;
@@ -65,13 +71,19 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     BEGIN
       --Todo logs
       OPEN V_RefCursor FOR
-      SELECT id, Title, COALESCE(Release_Date, CURRENT_DATE)
+      SELECT
+        id,
+        Title,
+        COALESCE(Release_Date, CURRENT_DATE)
       FROM movie
       WHERE P_TITLE IS NULL
             OR
             UPPER(Title) LIKE UPPER('%' || P_TITLE || '%') -- Case insensitive
       INTERSECT
-      SELECT id, Title, COALESCE(Release_Date, CURRENT_DATE)
+      SELECT
+        id,
+        Title,
+        COALESCE(Release_Date, CURRENT_DATE)
       FROM movie
       WHERE P_ACTORS IS NULL
             OR
@@ -79,12 +91,15 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
             (
               SELECT MOVIE
               FROM ARTIST
-                INNER JOIN MOVIE_ACTOR ON MOVIE = ID
+                INNER JOIN MOVIE_ACTOR ACTOR ON ACTOR.ACTOR = ARTIST.ID
               WHERE UPPER(Name) IN (SELECT UPPER(column_value)
                                     FROM TABLE (P_ACTORS)) -- Case insensitive
             )
       INTERSECT
-      SELECT id, Title, COALESCE(Release_Date, CURRENT_DATE)
+      SELECT
+        id,
+        Title,
+        COALESCE(Release_Date, CURRENT_DATE)
       FROM movie
       WHERE P_DIRECTORS IS NULL
             OR
@@ -93,41 +108,43 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
               SELECT movie
               FROM artist
                 INNER JOIN MOVIE_DIRECTOR DIRECTOR ON ARTIST.ID = DIRECTOR.DIRECTOR
-              WHERE UPPER(Name) IN (SELECT UPPER(column_value)
-                                    FROM TABLE (P_DIRECTORS)) -- Case insensitive
+              WHERE UPPER(Name) = ALL (SELECT UPPER(column_value)
+                                       FROM TABLE (P_DIRECTORS)) -- Case insensitive
             )
-      --       INTERSECT
-      --       SELECT id, Title, COALESCE(Release_Date, CURRENT_DATE)
-      --       FROM movie
-      --       WHERE
-      --         (
-      --           (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NULL)
-      --           OR
-      --           (
-      --             (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NOT NULL)
-      --             AND
-      --             (
-      --               (P_ANNEEAPRES = P_ANNEEAVANT AND
-      --                EXTRACT(YEAR FROM Release_date) = P_ANNEEAVANT)
-      --               OR
-      --               (P_ANNEEAPRES <> P_ANNEEAVANT AND EXTRACT(YEAR FROM
-      --                                                         Release_date) BETWEEN P_ANNEEAPRES AND P_ANNEEAVANT)
-      --             )
-      --           )
-      --           OR
-      --           (
-      --             (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NULL)
-      --             AND
-      --             (EXTRACT(YEAR FROM Release_date) < P_ANNEEAVANT)
-      --           )
-      --           OR
-      --           (
-      --             (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NOT NULL)
-      --             AND
-      --             (EXTRACT(YEAR FROM Release_date) > P_ANNEEAPRES)
-      --           )
-      --         )
-      ;
+      INTERSECT
+      SELECT
+        id,
+        Title,
+        COALESCE(Release_Date, CURRENT_DATE)
+      FROM movie
+      WHERE
+        (
+          (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NULL)
+          OR
+          (
+            (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NOT NULL)
+            AND
+            (
+              (P_ANNEEAPRES = P_ANNEEAVANT AND
+               EXTRACT(YEAR FROM Release_date) = P_ANNEEAVANT)
+              OR
+              (P_ANNEEAPRES <> P_ANNEEAVANT AND EXTRACT(YEAR FROM
+                                                        Release_date) BETWEEN P_ANNEEAPRES AND P_ANNEEAVANT)
+            )
+          )
+          OR
+          (
+            (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NULL)
+            AND
+            (EXTRACT(YEAR FROM Release_date) < P_ANNEEAVANT)
+          )
+          OR
+          (
+            (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NOT NULL)
+            AND
+            (EXTRACT(YEAR FROM Release_date) > P_ANNEEAPRES)
+          )
+        );
 
       RETURN V_RefCursor;
       EXCEPTION
@@ -145,9 +162,11 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
       -- todo logs
-      OPEN V_RefCursor FOR SELECT movie.id, LISTAGG(Name, '; ')
-      WITHIN GROUP (
-        ORDER BY MOVIE.id, Name)
+      OPEN V_RefCursor FOR SELECT
+                             movie.id,
+                             LISTAGG(Name, '; ')
+                             WITHIN GROUP (
+                               ORDER BY MOVIE.id, Name)
                            FROM ARTIST
                              INNER JOIN MOVIE_ACTOR ON ARTIST.ID = MOVIE_ACTOR.ACTOR
                              INNER JOIN movie ON movie.id = Movie_Actor.movie
@@ -171,9 +190,11 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
       --todo logs
-      OPEN V_RefCursor FOR SELECT movie.id, LISTAGG(Name, '; ')
-      WITHIN GROUP (
-        ORDER BY movie.id, Name)
+      OPEN V_RefCursor FOR SELECT
+                             movie.id,
+                             LISTAGG(Name, '; ')
+                             WITHIN GROUP (
+                               ORDER BY movie.id, Name)
                            FROM ARTIST
                              INNER JOIN MOVIE_DIRECTOR ON ARTIST.ID = MOVIE_DIRECTOR.DIRECTOR
                              INNER JOIN Movie ON movie.id = MOVIE_DIRECTOR.MOVIE
