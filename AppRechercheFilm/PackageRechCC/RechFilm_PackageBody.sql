@@ -89,12 +89,14 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
             OR
             id IN
             (
-              SELECT MOVIE
+              SELECT movie
               FROM ARTIST
-                INNER JOIN MOVIE_ACTOR ACTOR ON ACTOR.ACTOR = ARTIST.ID
-              WHERE UPPER(Name) IN (SELECT UPPER(column_value)
-                                    FROM TABLE (P_ACTORS)) -- Case insensitive
-            )
+                INNER JOIN MOVIE_ACTOR A2 ON ARTIST.ID = A2.ACTOR
+              WHERE upper(name) IN (SELECT upper(COLUMN_VALUE)
+                                    FROM TABLE (P_ACTORS))
+              GROUP BY movie
+              HAVING count(movie) >= (SELECT count(COLUMN_VALUE)
+                                      FROM TABLE (P_ACTORS)))
       INTERSECT
       SELECT
         id,
@@ -106,53 +108,56 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
             id IN
             (
               SELECT movie
-              FROM artist
-                INNER JOIN MOVIE_DIRECTOR DIRECTOR ON ARTIST.ID = DIRECTOR.DIRECTOR
-              WHERE UPPER(Name) = ALL (SELECT UPPER(column_value)
-                                       FROM TABLE (P_DIRECTORS)) -- Case insensitive
+              FROM ARTIST
+                INNER JOIN MOVIE_DIRECTOR A2 ON ARTIST.ID = A2.DIRECTOR
+              WHERE upper(name) IN (SELECT upper(COLUMN_VALUE)
+                                    FROM TABLE (P_DIRECTORS))
+              GROUP BY movie
+              HAVING count(movie) >= (SELECT count(COLUMN_VALUE)
+                                      FROM TABLE (P_DIRECTORS)) -- Case insensitive
             )
-      INTERSECT
-      SELECT
-        id,
-        Title,
-        COALESCE(Release_Date, CURRENT_DATE)
-      FROM movie
-      WHERE
-        (
-          (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NULL)
-          OR
-          (
-            (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NOT NULL)
-            AND
-            (
-              (P_ANNEEAPRES = P_ANNEEAVANT AND
-               EXTRACT(YEAR FROM Release_date) = P_ANNEEAVANT)
-              OR
-              (P_ANNEEAPRES <> P_ANNEEAVANT AND EXTRACT(YEAR FROM
-                                                        Release_date) BETWEEN P_ANNEEAPRES AND P_ANNEEAVANT)
-            )
-          )
-          OR
-          (
-            (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NULL)
-            AND
-            (EXTRACT(YEAR FROM Release_date) < P_ANNEEAVANT)
-          )
-          OR
-          (
-            (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NOT NULL)
-            AND
-            (EXTRACT(YEAR FROM Release_date) > P_ANNEEAPRES)
-          )
-        );
-
+--       INTERSECT
+--       SELECT
+--         id,
+--         Title,
+--         COALESCE(Release_Date, CURRENT_DATE)
+--       FROM movie
+--       WHERE
+--         (
+--           (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NULL)
+--           OR
+--           (
+--             (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NOT NULL)
+--             AND
+--             (
+--               (P_ANNEEAPRES = P_ANNEEAVANT AND
+--                EXTRACT(YEAR FROM Release_date) = P_ANNEEAVANT)
+--               OR
+--               (P_ANNEEAPRES <> P_ANNEEAVANT AND EXTRACT(YEAR FROM
+--                                                         Release_date) BETWEEN P_ANNEEAPRES AND P_ANNEEAVANT)
+--             )
+--           )
+--           OR
+--           (
+--             (P_ANNEEAVANT IS NOT NULL AND P_ANNEEAPRES IS NULL)
+--             AND
+--             (EXTRACT(YEAR FROM Release_date) < P_ANNEEAVANT)
+--           )
+--           OR
+--           (
+--             (P_ANNEEAVANT IS NULL AND P_ANNEEAPRES IS NOT NULL)
+--             AND
+--             (EXTRACT(YEAR FROM Release_date) > P_ANNEEAPRES)
+--           )
+--         )
+      ;
       RETURN V_RefCursor;
       EXCEPTION
       WHEN OTHERS THEN
-      IF (V_RefCursor%ISOPEN)
-      THEN
-        CLOSE V_RefCursor;
-      END IF;
+        IF (V_RefCursor%ISOPEN)
+        THEN
+          CLOSE V_RefCursor;
+        END IF;
       -- todo logs
       RETURN NULL;
     END GetMovies;
