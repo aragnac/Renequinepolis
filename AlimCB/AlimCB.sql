@@ -17,6 +17,8 @@ CREATE OR REPLACE PACKAGE pkgAlim AS
   PROCEDURE insertDirector(line VARCHAR2, movieId MOVIE.ID%TYPE);
   PROCEDURE insertGenre(line VARCHAR2, movieId MOVIE.ID%TYPE);
 END pkgAlim;
+/
+
 CREATE OR REPLACE PACKAGE BODY pkgAlim AS
   /**************************************/
   /************* ADD LOGS ***************/

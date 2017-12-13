@@ -1,6 +1,27 @@
 CREATE OR REPLACE PACKAGE BODY RechFilm AS
   /****************************************************************************************************************************************/
 
+  PROCEDURE addLogError(m logerror.message%TYPE) AS
+    --     PRAGMA AUTONOMOUS_TRANSACTION
+    BEGIN
+      INSERT INTO logerror VALUES (localtimestamp, NULL, m);
+      COMMIT;
+      EXCEPTION
+      WHEN OTHERS THEN
+      addLogError('addLogError : ' || SQLERRM);
+      ROLLBACK;
+    END;
+
+  PROCEDURE addLogInfos(m loginfos.message%TYPE) AS
+    BEGIN
+      INSERT INTO loginfos VALUES (localtimestamp, m);
+      COMMIT;
+      EXCEPTION
+      WHEN OTHERS THEN
+      addLogError('addLogInfos : ' || SQLERRM);
+      ROLLBACK;
+    END;
+
   ------------ Connexion ------------------------------------------------------------
   -- *** IN : Un Users.Login%TYPE
   -- *** OUT : SYS_REFCURSOR
@@ -15,15 +36,15 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
       OPEN V_RefCursor FOR SELECT Password
                            FROM utilisateur
                            WHERE Login = P_LOGIN;
-
+      addLogInfos('Connexion:  Login reussi pour ' || P_LOGIN || '.');
       RETURN V_RefCursor;
       EXCEPTION
       WHEN OTHERS THEN
-      IF (V_RefCursor%ISOPEN)
-      THEN
-        CLOSE V_RefCursor;
-      END IF;
-      --todo logs;
+        IF (V_RefCursor%ISOPEN)
+        THEN
+          CLOSE V_RefCursor;
+        END IF;
+      addLogErrors('Connexion : Login failed');
       RETURN NULL;
     END Connexion;
 
@@ -39,7 +60,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     RETURN SYS_REFCURSOR AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
-      --todo logs
+      addLogInfos('GetMovie:  Debut recuperation film.');
       OPEN V_RefCursor FOR SELECT
                              id,
                              Title,
@@ -51,7 +72,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
                            FROM movie
                              INNER JOIN MOVIE_POSTER ON MOVIE.ID = MOVIE_POSTER.MOVIE
                            WHERE id = P_IDMOVIE;
-
+      addLogInfos('GetMovie:  Get reussi pour ' || P_IDMOVIE || '.');
       RETURN V_RefCursor;
       EXCEPTION
       WHEN OTHERS THEN
@@ -59,7 +80,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
       THEN
         CLOSE V_RefCursor;
       END IF;
-      --todo logs
+      addLogErrors('GetMovie : Failed to get movie');
       RETURN NULL;
     END GetMovie;
 
@@ -69,7 +90,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     RETURN SYS_REFCURSOR AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
-      --Todo logs
+      addLogInfos('GetMovies:  Debut recuperation films critères.');
       OPEN V_RefCursor FOR
       SELECT
         id,
@@ -151,6 +172,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
 --           )
 --         )
       ;
+      addLogInfos('GetMovies : Les films récupérés avec succès.');
       RETURN V_RefCursor;
       EXCEPTION
       WHEN OTHERS THEN
@@ -158,7 +180,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
         THEN
           CLOSE V_RefCursor;
         END IF;
-      -- todo logs
+      addLogErrors('GetMovies : Failed to get Movies.');
       RETURN NULL;
     END GetMovies;
 
@@ -166,7 +188,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     RETURN SYS_REFCURSOR AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
-      -- todo logs
+      addLogInfos('GetActorsFromMovie : Debut recuperation.');
       OPEN V_RefCursor FOR SELECT
                              movie.id,
                              LISTAGG(Name, '; ')
@@ -178,7 +200,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
                            WHERE movie.id = P_IDMOVIE
                            GROUP BY movie.id
                            ORDER BY movie.id;
-
+      addLogInfos('GetActorsFromMovie : Recuperation effectuée avec succès');
       RETURN V_RefCursor;
       EXCEPTION
       WHEN OTHERS THEN
@@ -186,7 +208,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
       THEN
         CLOSE V_RefCursor;
       END IF;
-      --todo logs
+      addLogErros('GetActorsFromMovie : Failed to get actors');
       RETURN NULL;
     END GetActorsFromMovie;
 
@@ -194,7 +216,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
     RETURN SYS_REFCURSOR AS
     V_RefCursor SYS_REFCURSOR;
     BEGIN
-      --todo logs
+      addLogInfos('GetDirectorsFromMovie : Debut recuperation.');
       OPEN V_RefCursor FOR SELECT
                              movie.id,
                              LISTAGG(Name, '; ')
@@ -206,7 +228,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
                            WHERE movie.id = P_IDMOVIE
                            GROUP BY movie.id
                            ORDER BY movie.id;
-
+      addLogInfos('GetDirectorsFromMovie : Récupération effectuée avec succès.');
       RETURN V_RefCursor;
       EXCEPTION
       WHEN OTHERS THEN
@@ -214,7 +236,7 @@ CREATE OR REPLACE PACKAGE BODY RechFilm AS
       THEN
         CLOSE V_RefCursor;
       END IF;
-      -- todo logs
+      addLogErrors('GetDirectorsFromMovie : Failed to get directors.');
       RETURN NULL;
     END GetDirectorsFromMovie;
 
