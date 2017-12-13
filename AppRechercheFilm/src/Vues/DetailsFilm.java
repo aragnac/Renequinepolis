@@ -1,6 +1,11 @@
 package Vues;
 
 import Tools.FilmDetails;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -27,6 +32,7 @@ public class DetailsFilm extends javax.swing.JFrame {
     public DetailsFilm(FilmDetails fd) {
         actuel = fd;
         setupFilm();
+        popupImage();
     }
 
     private void setupFilm() {
@@ -42,6 +48,19 @@ public class DetailsFilm extends javax.swing.JFrame {
         acteurList.setListData(actuel.getLActor());
         directorList.setListData(actuel.getLDirector());
         genreList.setListData(actuel.getLGenre());
+    }
+
+    private void popupImage(){
+        //http://image.tmdb.org/t/p/w185/<%
+        Image image = null;
+        try {
+            URL url = new URL(
+                    "http://image.tmdb.org/t/p/w185/"+ actuel.getPoster());
+            image = ImageIO.read(url);
+            JLabel picLabel = new JLabel(new ImageIcon(image));
+            jPanel1.add(picLabel);
+        } catch (Exception e) {
+        }
     }
 
     /**
