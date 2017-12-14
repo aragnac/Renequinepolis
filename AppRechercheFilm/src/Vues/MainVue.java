@@ -3,11 +3,15 @@ package Vues;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -17,11 +21,7 @@ import Tools.BdType;
 import Tools.FilmDetails;
 
 public class MainVue extends javax.swing.JFrame {
-    private Component[] components;
     private BDRenequinepolis db;
-    private ResultSet resMovies;
-    private FilmDetails filmDet;
-
 
     public MainVue() {
         initComponents();
@@ -147,7 +147,7 @@ public class MainVue extends javax.swing.JFrame {
         };
         //ResultSet res;
         try {
-            resMovies = !PanelDetails.isVisible()
+            ResultSet resMovies = !PanelDetails.isVisible()
                     ? db.getMovie(idTF.getText())
                     : db.getMovies(nomTF.getText(), stringToArrayList(acteursTF.getText()), stringToArrayList(realisateurTB.getText()), dateTF.getText());
 
@@ -174,7 +174,10 @@ public class MainVue extends javax.swing.JFrame {
             while (resMovies.next()) {
                 Vector<Object> vv = new Vector<>();
                 for (int i = 1; i <= numberOfColumns; ++i) {
-                    vv.add(resMovies.getObject(i));
+                    if (meta.getColumnTypeName(i).equals("DATE"))
+                        vv.add(new SimpleDateFormat("dd/MM/yyyy").format(resMovies.getDate(i)));
+                    else
+                        vv.add(resMovies.getObject(i));
                 }
                 v.add(vv);
             }
@@ -202,33 +205,11 @@ public class MainVue extends javax.swing.JFrame {
     }
 
     private void ResultatJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResultatJTableMouseClicked
-        filmDet = new FilmDetails();
         if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2) {
-            int row = ResultatJTable.getSelectedRow();
-            String id = (String) ResultatJTable.getValueAt(row, 0);
-            try {
-                while (resMovies.next()) {
-                    //Quand on retrouve l'id correspondant dans le resultset, on recupère les données
-                    if (resMovies.getInt(1) == Integer.parseInt(id)) {
-                        filmDet = new FilmDetails(resMovies.getInt(1),
-                                resMovies.getString(2),
-                                resMovies.getString(3),
-                                resMovies.getString(4),
-                                resMovies.getDate(5),
-                                resMovies.getDouble(6),
-                                resMovies.getInt(7),
-                                resMovies.getString(8),
-                                resMovies.getLong(9),
-                                resMovies.getBlob(10),
-                                db.getActors(resMovies.getString(1)),
-                                db.getDirectors(resMovies.getString(1)),
-                                null);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            new DetailsFilm(filmDet).setVisible(true);
+            int row = ResultatJTable.rowAtPoint(evt.getPoint());
+            BigDecimal id = (BigDecimal) ResultatJTable.getValueAt(row, 0);
+            List<List<Object>> l = this.db.getMovieDetails(id.toBigInteger().intValue());
+            new DetailsFilm(FilmDetails.fromList(l)).setVisible(true);
         }//GEN-LAST:event_ResultatJTableMouseClicked
     }
 

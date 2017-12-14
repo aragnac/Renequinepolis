@@ -1,7 +1,11 @@
 package Tools;
 
+import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
@@ -56,7 +60,9 @@ public class FilmDetails {
         return Duree;
     }
 
-    public Blob getPoster(){return Poster;}
+    public Blob getPoster() {
+        return Poster;
+    }
 
     public Vector<String> getLActor() {
         return LActor;
@@ -68,6 +74,32 @@ public class FilmDetails {
 
     public Vector<String> getLGenre() {
         return LGenre;
+    }
+
+    public static FilmDetails fromList(List<List<Object>> l) {
+        List<Object> list = l.get(0);
+        Vector<String> actor = new Vector<>();
+        for (Object o : l.get(1)) actor.add(o.toString());
+        Vector<String> director = new Vector<>();
+        for (Object o : l.get(2))
+            director.add(o.toString());
+        Vector<String> genre = new Vector<>();
+        for (Object o : l.get(3))
+            genre.add(o.toString());
+
+        return new FilmDetails(((BigDecimal) list.get(0)).intValue(),
+                list.get(1).toString(),
+                list.get(2).toString(),
+                list.get(3).toString(),
+                new Date(((Timestamp) list.get(4)).getTime()),
+                ((BigDecimal)list.get(5)).intValue(),
+                ((BigDecimal)list.get(6)).intValue(),
+                list.get(7).toString(),
+                ((BigDecimal)list.get(8)).intValue(),
+                (Blob) list.get(9),
+                actor,
+                director,
+                genre);
     }
 
     public FilmDetails() {
@@ -86,7 +118,7 @@ public class FilmDetails {
         LGenre = null;
     }
 
-    public FilmDetails(int id, String titre, String titreOriginal, String status, Date dateSortie, double moyenne_Vote, int vote_Count, String certification, long duree, Blob poster,Vector<String> LActor, Vector<String> LDirector, Vector<String> LGenre) {
+    public FilmDetails(int id, String titre, String titreOriginal, String status, Date dateSortie, double moyenne_Vote, int vote_Count, String certification, long duree, Blob poster, Vector<String> LActor, Vector<String> LDirector, Vector<String> LGenre) {
         Id = id;
         Titre = titre;
         TitreOriginal = titreOriginal;
