@@ -94,9 +94,9 @@ public class BDRenequinepolis extends Bd {
             for (int i = 0; i < rs.length; i++) {
                 List<Object> l = new LinkedList<>();
                 if (i == 0) {
-                    rs[i].next();
-                    for (int j = 1; j <= rs[i].getMetaData().getColumnCount(); j++)
-                        l.add(rs[i].getObject(j));
+                    if (rs[i].next())
+                        for (int j = 1; j <= rs[i].getMetaData().getColumnCount(); j++)
+                            l.add(rs[i].getObject(j));
                 } else while (rs[i].next())
                     l.add(rs[i].getObject(1));
                 retour.add(l);
