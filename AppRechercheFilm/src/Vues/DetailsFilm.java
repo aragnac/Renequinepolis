@@ -6,8 +6,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.DateFormat;
 
 public class DetailsFilm extends javax.swing.JFrame {
@@ -52,7 +54,7 @@ public class DetailsFilm extends javax.swing.JFrame {
 
     private void popupImage(){
         //http://image.tmdb.org/t/p/w185/<%
-        Image image = null;
+        /*Image image = null;
         try {
             URL url = new URL(
                     "http://image.tmdb.org/t/p/w185/"+ actuel.getPoster());
@@ -60,7 +62,20 @@ public class DetailsFilm extends javax.swing.JFrame {
             JLabel picLabel = new JLabel(new ImageIcon(image));
             jPanel1.add(picLabel);
         } catch (Exception e) {
+        }*/
+        Blob blob = actuel.getPoster();
+        int blobLength = 0;
+        try {
+            blobLength = (int) blob.length();
+            byte[] b = blob.getBytes(1, blobLength);
+            Icon icon = new ImageIcon(b);
+            JLabel picLabel = new JLabel(icon);
+            jPanel1.add(picLabel);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        //byte[] b = actuel.getPoster().getBytes(1);
     }
 
     /**
