@@ -1,12 +1,15 @@
 package Tools;
 
 import oracle.jdbc.OracleTypes;
+import oracle.jdbc.oracore.OracleType;
 import oracle.sql.ARRAY;
 import oracle.sql.ArrayDescriptor;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -44,8 +47,7 @@ public class BDRenequinepolis extends Bd {
         CallableStatement cs;
         try {
             ArrayDescriptor array_artistsDesc = ArrayDescriptor.createDescriptor("CB.NAMEARRAY", Connection);
-
-            cs = Connection.prepareCall("{? = call RechFilm.GetMovies(?, ?, ?, ?, ?)}");
+            cs = Connection.prepareCall("{? = call RechFilm.GetMovies(?, ?, ?, ?)}");
             cs.registerOutParameter(1, OracleTypes.CURSOR);
 
             //Titre
@@ -56,22 +58,17 @@ public class BDRenequinepolis extends Bd {
             if (acteurs != null && acteurs.size() != 0) {
                 Array array = new ARRAY(array_artistsDesc, Connection, acteurs.toArray());
                 cs.setArray(3, array);
-            } else cs.setNull(3, Types.ARRAY,"CB.NAMEARRAY");
+            } else cs.setNull(3, Types.ARRAY, "CB.NAMEARRAY");
 
             //Réalisateur
             if (producteurs != null && producteurs.size() != 0) {
                 Array array = new ARRAY(array_artistsDesc, Connection, producteurs.toArray());
                 cs.setArray(4, array);
-            } else cs.setNull(4, Types.ARRAY,"CB.NAMEARRAY");
+            } else cs.setNull(4, Types.ARRAY, "CB.NAMEARRAY");
 
             //Date
-            if (!date.equals("")) {
-                cs.setString(5, date);
-                cs.setString(6, date);
-            } else {
-                cs.setNull(5, Types.VARCHAR);
-                cs.setNull(6, Types.VARCHAR);
-            }
+            if (!date.equals("")) cs.setString(5, date);
+            else cs.setNull(5, Types.VARCHAR);
 
             boolean result = cs.execute();
 
@@ -82,9 +79,38 @@ public class BDRenequinepolis extends Bd {
         return rs;
     }
 
-    public Vector<String> getActors(String id){
+    public List<List<Object>> getMovieDetails(int id) {
+        CallableStatement cs;
+        try {
+            cs = Connection.prepareCall("{call RechFilm.GetMovieDetails(?,?,?,?,?)}");
+            cs.setInt(1, id);
+            for (int i = 2; i <= 5; i++)
+                cs.registerOutParameter(i, OracleTypes.CURSOR);
+            cs.execute();
+            ResultSet[] rs = new ResultSet[4];
+            List<List<Object>> retour = new LinkedList<>();
+            for (int i = 2; i <= 5; i++)
+                rs[i - 2] = (ResultSet) cs.getObject(i);
+            for (int i = 0; i < rs.length; i++) {
+                List<Object> l = new LinkedList<>();
+                if (i == 0) {
+                    if (rs[i].next())
+                        for (int j = 1; j <= rs[i].getMetaData().getColumnCount(); j++)
+                            l.add(rs[i].getObject(j));
+                } else while (rs[i].next())
+                    l.add(rs[i].getObject(1));
+                retour.add(l);
+            }
+            return retour;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Vector<String> getActors(String id) {
         Vector<String> actors = null;
-        ResultSet rs = null;
+        ResultSet rs;
         CallableStatement cs;
         try {
             cs = Connection.prepareCall("{? = call RechFilm.GetActorsFromMovie(?)}");
@@ -93,11 +119,10 @@ public class BDRenequinepolis extends Bd {
             if (Pattern.matches("\\d+", id)) cs.setInt(2, Integer.parseInt(id));
             else cs.setNull(2, Types.INTEGER);
             cs.execute();
-            rs = (ResultSet)cs.getObject(1);
+            rs = (ResultSet) cs.getObject(1);
 
             actors = new Vector<>();
-            while (rs.next())
-            {
+            while (rs.next()) {
                 actors.addElement(rs.getString(1));
             }
         } catch (SQLException e) {
@@ -106,7 +131,7 @@ public class BDRenequinepolis extends Bd {
         return actors;
     }
 
-    public Vector<String> getDirectors(String id){
+    public Vector<String> getDirectors(String id) {
         Vector<String> directors = null;
         ResultSet rs = null;
         CallableStatement cs;
@@ -117,11 +142,10 @@ public class BDRenequinepolis extends Bd {
             if (Pattern.matches("\\d+", id)) cs.setInt(2, Integer.parseInt(id));
             else cs.setNull(2, Types.INTEGER);
             cs.execute();
-            rs = (ResultSet)cs.getObject(1);
+            rs = (ResultSet) cs.getObject(1);
 
             directors = new Vector<>();
-            while (rs.next())
-            {
+            while (rs.next()) {
                 directors.addElement(rs.getString(1));
             }
         } catch (SQLException e) {

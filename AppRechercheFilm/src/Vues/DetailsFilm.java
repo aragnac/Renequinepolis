@@ -5,6 +5,7 @@ import Tools.FilmDetails;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 
 public class DetailsFilm extends javax.swing.JFrame {
-
+    //Todo fix de l'application qui se coupe quand cette frame est fermée
     Connection db;
     String idFilm;
     private FilmDetails actuel;
@@ -26,19 +27,20 @@ public class DetailsFilm extends javax.swing.JFrame {
     }
 
     public DetailsFilm(Connection base, String id) {
-        initComponents();
+        this();
         db = base;
         idFilm = id;
     }
 
     public DetailsFilm(FilmDetails fd) {
+        this();
         actuel = fd;
         setupFilm();
         popupImage();
     }
 
     private void setupFilm() {
-        idLabel.setText(String.valueOf(actuel.getId()));
+        idLabelX.setText(String.valueOf(actuel.getId()));
         titreLabelX.setText(actuel.getTitre());
         titreOrigiLabelX.setText(actuel.getTitreOriginal());
         statutLabelX.setText(actuel.getStatus());
@@ -54,15 +56,6 @@ public class DetailsFilm extends javax.swing.JFrame {
 
     private void popupImage(){
         //http://image.tmdb.org/t/p/w185/<%
-        /*Image image = null;
-        try {
-            URL url = new URL(
-                    "http://image.tmdb.org/t/p/w185/"+ actuel.getPoster());
-            image = ImageIO.read(url);
-            JLabel picLabel = new JLabel(new ImageIcon(image));
-            jPanel1.add(picLabel);
-        } catch (Exception e) {
-        }*/
         Blob blob = actuel.getPoster();
         int blobLength = 0;
         try {
